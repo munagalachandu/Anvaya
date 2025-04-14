@@ -17,7 +17,7 @@ const Header = () => {
             className="w-12 h-12"
           />
           <div>
-            <div className="text-sm text-gray-600">Department of Computer Science</div>
+            <div className="text-sm text-gray-600">Department of Artificial Intelligence and Machine Learning</div>
             <h1 className="text-2xl font-bold text-primary">Anvaya</h1>
           </div>
         </div>
