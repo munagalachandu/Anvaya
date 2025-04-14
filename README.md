@@ -1,2 +1,2 @@
 # Anvaya
-Department event managing websiteS
+Department event managing website
