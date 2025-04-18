@@ -1,56 +1,51 @@
-
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import AnvayaLogo from '@/components/assets/Anvaya.png';
+import DSCLogo from '@/components/assets/image.png';
+import Fb from '@/components/assets/fb.png';
+import Insta from '@/components/assets/insta.png';
+import LinkedIn from '@/components/assets/linkedin.png';
 
 const Header = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   return (
-    <header className="w-full bg-white shadow-sm">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+    <header className="w-full bg-white shadow-md border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-6 py-4 grid grid-cols-3 items-center">
+        
+        {/* Left Section */}
         <div className="flex items-center space-x-4">
-          <img 
-            src="/placeholder.svg" 
-            alt="College Logo" 
-            className="w-12 h-12"
-          />
-          <div>
-            <div className="text-sm text-gray-600">Department of Artificial Intelligence and Machine Learning</div>
-            <h1 className="text-2xl font-bold text-primary">Anvaya</h1>
-          </div>
+          <img src={DSCLogo} alt="DSCE Logo" className="w-12 h-12 rounded-full shadow-sm" />
+          <p className="text-gray-800 text-base font-medium leading-snug">
+            Dayananda Sagar College <br /> of Engineering
+          </p>
         </div>
 
-        {/* Mobile menu button */}
-        <div className="md:hidden">
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <Menu />
-          </Button>
+        {/* Center Section */}
+        <div className="flex justify-center items-center">
+          <h1 className="text-4xl font-extrabold text-purple-600 tracking-wide">
+            Anvaya
+          </h1>
         </div>
 
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="absolute top-16 left-0 w-full bg-white shadow-md z-50 md:hidden animate-fade-in">
-            <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-              <Link to="/" className="text-gray-800 hover:text-primary">Home</Link>
-              <div>
-                <div className="text-gray-800 mb-2">Events</div>
-                <div className="pl-4 flex flex-col space-y-2">
-                  <Link to="/events/cultural" className="text-gray-600 hover:text-primary">Cultural</Link>
-                  <Link to="/events/sports" className="text-gray-600 hover:text-primary">Sports</Link>
-                  <Link to="/events/technical" className="text-gray-600 hover:text-primary">Technical</Link>
-                  <Link to="/events/workshops" className="text-gray-600 hover:text-primary">Workshops</Link>
-                </div>
-              </div>
-              <Link to="/login" className="text-gray-800 hover:text-primary">Login</Link>
+        {/* Right Section */}
+        <div className="flex items-center justify-end space-x-4">
+          <div className="text-right">
+            <p className="text-gray-800 text-base font-medium leading-snug">
+              Department of Artificial Intelligence <br /> and Machine Learning
+            </p>
+            <div className="flex justify-end space-x-2 mt-2">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                <img src={Fb} alt="Facebook" className="w-5 h-5 hover:scale-110 transition" />
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                <img src={Insta} alt="Instagram" className="w-5 h-5 hover:scale-110 transition" />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                <img src={LinkedIn} alt="LinkedIn" className="w-5 h-5 hover:scale-110 transition" />
+              </a>
             </div>
           </div>
-        )}
+          <img src={AnvayaLogo} alt="Anvaya Logo" className="w-12 h-12 rounded-full shadow-sm" />
+        </div>
+
       </div>
     </header>
   );
