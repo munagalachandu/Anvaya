@@ -1,14 +1,28 @@
-
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
 import { Eye, EyeOff, User, Key } from 'lucide-react';
 
 const loginSchema = z.object({
@@ -24,7 +38,7 @@ const LoginForm = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const searchParams = new URLSearchParams(location.search);
   const role = searchParams.get('role') || 'student';
 
@@ -38,20 +52,29 @@ const LoginForm = () => {
 
   const onSubmit = async (values: LoginValues) => {
     setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      // Mock authentication logic - in a real app, you'd validate with a backend
-      if (values.email === 'admin@example.com' && values.password === 'password') {
+
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+          role,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
         toast({
           title: "Login successful",
-          description: `Welcome back, ${role}!`,
+          description: result.message || `Welcome back, ${role}!`,
         });
-        
-        // Redirect based on role
-        switch(role) {
+
+        switch (role) {
           case 'student':
             navigate('/dashboard/student');
             break;
@@ -67,11 +90,19 @@ const LoginForm = () => {
       } else {
         toast({
           title: "Login failed",
-          description: "Invalid email or password. Please try again.",
+          description: result.message || "Invalid email or password. Please try again.",
           variant: "destructive",
         });
       }
-    }, 1500);
+    } catch (error) {
+      toast({
+        title: "An error occurred",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    }
+
+    setIsLoading(false);
   };
 
   const roleLabels = {
@@ -99,14 +130,14 @@ const LoginForm = () => {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <Input 
-                        placeholder="your.email@example.com" 
-                        className="pl-10" 
-                        {...field} 
+                      <Input
+                        placeholder="your.email@example.com"
+                        className="pl-10"
+                        {...field}
                       />
-                      <User 
-                        size={18} 
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" 
+                      <User
+                        size={18}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                       />
                     </div>
                   </FormControl>
@@ -117,7 +148,7 @@ const LoginForm = () => {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="password"
@@ -126,15 +157,15 @@ const LoginForm = () => {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <Input 
-                        type={showPassword ? "text" : "password"} 
-                        placeholder="••••••••" 
-                        className="pl-10" 
-                        {...field} 
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        className="pl-10"
+                        {...field}
                       />
-                      <Key 
-                        size={18} 
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" 
+                      <Key
+                        size={18}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                       />
                       <Button
                         type="button"
@@ -159,10 +190,10 @@ const LoginForm = () => {
                 </FormItem>
               )}
             />
-            
-            <Button 
-              type="submit" 
-              className="w-full" 
+
+            <Button
+              type="submit"
+              className="w-full"
               disabled={isLoading}
             >
               {isLoading ? "Signing in..." : "Sign in"}
