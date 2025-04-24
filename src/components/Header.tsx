@@ -8,25 +8,17 @@ import LinkedIn from '@/components/assets/linkedin.png';
 const Header = () => {
   return (
     <header className="w-full bg-white shadow-md border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-6 py-4 grid grid-cols-3 items-center">
-        
+      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Left Section */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-6">
           <img src={DSCLogo} alt="DSCE Logo" className="w-12 h-12 rounded-full shadow-sm" />
           <p className="text-gray-800 text-base font-medium leading-snug">
             Dayananda Sagar College <br /> of Engineering
           </p>
         </div>
-
-        {/* Center Section */}
-        <div className="flex justify-center items-center">
-          <h1 className="text-4xl font-extrabold text-purple-600 tracking-wide">
-            Anvaya
-          </h1>
-        </div>
-
+        
         {/* Right Section */}
-        <div className="flex items-center justify-end space-x-4">
+        <div className="flex items-center space-x-4">
           <div className="text-right">
             <p className="text-gray-800 text-base font-medium leading-snug">
               Department of Artificial Intelligence <br /> and Machine Learning
@@ -45,7 +37,6 @@ const Header = () => {
           </div>
           <img src={AnvayaLogo} alt="Anvaya Logo" className="w-12 h-12 rounded-full shadow-sm" />
         </div>
-
       </div>
     </header>
   );
