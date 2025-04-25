@@ -1,5 +1,5 @@
 import React from 'react';
-import { Linkedin, Instagram, Twitter, Youtube, Mail, Phone, MapPin } from 'lucide-react';
+import { Linkedin, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -16,16 +16,13 @@ const Footer = () => {
         {/* Top Section with Social Icons */}
         <div className="flex justify-center mb-6">
           <div className="flex space-x-6">
-            <a href="#" aria-label="LinkedIn" className="text-purple-200 hover:text-white transition-all duration-300">
+            <a href="https://www.linkedin.com/company/aimldeptdsce" aria-label="LinkedIn" className="text-purple-200 hover:text-white transition-all duration-300">
               <Linkedin size={22} />
             </a>
-            <a href="#" aria-label="Instagram" className="text-purple-200 hover:text-white transition-all duration-300">
+            <a href="https://www.instagram.com/aimldeptdsce" aria-label="Instagram" className="text-purple-200 hover:text-white transition-all duration-300">
               <Instagram size={22} />
             </a>
-            <a href="#" aria-label="Twitter" className="text-purple-200 hover:text-white transition-all duration-300">
-              <Twitter size={22} />
-            </a>
-            <a href="#" aria-label="YouTube" className="text-purple-200 hover:text-white transition-all duration-300">
+            <a href="https://www.youtube.com/@aimldeptdsce" aria-label="YouTube" className="text-purple-200 hover:text-white transition-all duration-300">
               <Youtube size={22} />
             </a>
           </div>
