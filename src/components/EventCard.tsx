@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CalendarDays, MapPin, ExternalLink, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -27,26 +26,26 @@ const EventCard: React.FC<EventCardProps> = ({
   brochureUrl,
   isPast = false
 }) => {
-  const categoryClasses = {
-    'cultural': 'event-card-cultural',
-    'sports': 'event-card-sports',
-    'technical': 'event-card-technical',
-    'workshops': 'event-card-workshops'
-  };
-
+  // Using the same white card background for all cards
+  const cardClass = "bg-white overflow-hidden rounded shadow-md";
+  
+  // Text colors for different categories
   const categoryTextClasses = {
-    'cultural': 'text-cultural-foreground',
-    'sports': 'text-white',
-    'technical': 'text-technical-foreground',
-    'workshops': 'text-gray-800'
+    'cultural': 'text-purple-700',  // Purple text for cultural
+    'sports': 'text-purple-700',
+    'technical': 'text-purple-700',
+    'workshops': 'text-purple-700'
   };
+  
+  // Button color - using purple (from the third card) for all summary buttons
+  const buttonClass = "bg-purple-600 hover:bg-purple-700 text-white";
 
   return (
-    <div className={`event-card ${categoryClasses[category]} overflow-hidden`}>
+    <div className={`event-card ${cardClass}`}>
       <div className="h-40 overflow-hidden">
-        <img 
-          src={image} 
-          alt={title} 
+        <img
+          src={image}
+          alt={title}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
         />
       </div>
@@ -55,12 +54,12 @@ const EventCard: React.FC<EventCardProps> = ({
         <h3 className={`text-lg font-bold mb-2 ${categoryTextClasses[category]}`}>{title}</h3>
         
         <div className="space-y-2 mb-4">
-          <div className={`flex items-center space-x-2 ${categoryTextClasses[category]} text-sm opacity-90`}>
+          <div className="flex items-center space-x-2 text-gray-600 text-sm">
             <CalendarDays size={16} />
             <span>{date}</span>
           </div>
           
-          <div className={`flex items-center space-x-2 ${categoryTextClasses[category]} text-sm opacity-90`}>
+          <div className="flex items-center space-x-2 text-gray-600 text-sm">
             <MapPin size={16} />
             <span>{venue}</span>
           </div>
@@ -68,12 +67,12 @@ const EventCard: React.FC<EventCardProps> = ({
         
         <div className="flex flex-col space-y-2">
           {brochureUrl && (
-            <a 
-              href={brochureUrl} 
-              target="_blank" 
+            <a
+              href={brochureUrl}
+              target="_blank"
               rel="noopener noreferrer"
-              className={`flex items-center justify-center space-x-1 text-sm font-medium p-2 rounded-md 
-                bg-white/20 hover:bg-white/30 transition-colors ${categoryTextClasses[category]}`}
+              className="flex items-center justify-center space-x-1 text-sm font-medium p-2 rounded-md
+                bg-gray-100 hover:bg-gray-200 transition-colors text-gray-800"
             >
               <ExternalLink size={14} />
               <span>View Brochure</span>
@@ -81,26 +80,26 @@ const EventCard: React.FC<EventCardProps> = ({
           )}
           
           {isPast ? (
-            <Link 
+            <Link
               to={`/events/${category}/${id}`}
-              className={`flex items-center justify-center space-x-1 text-sm font-medium p-2 rounded-md 
-                bg-white/20 hover:bg-white/30 transition-colors ${categoryTextClasses[category]}`}
+              className="flex items-center justify-center space-x-1 text-sm font-medium p-2 rounded-md
+                text-white transition-colors bg-purple-600 hover:bg-purple-700"
             >
               <Users size={14} />
               <span>View Summary</span>
             </Link>
           ) : registrationUrl ? (
-            <a 
-              href={registrationUrl} 
-              target="_blank" 
+            <a
+              href={registrationUrl}
+              target="_blank"
               rel="noopener noreferrer"
               className="w-full"
             >
-              <Button variant="secondary" className="w-full">Register Now</Button>
+              <Button variant="secondary" className={`w-full ${buttonClass}`}>Register Now</Button>
             </a>
           ) : (
             <Link to={`/events/${category}/${id}`} className="w-full">
-              <Button variant="secondary" className="w-full">Explore</Button>
+              <Button variant="secondary" className={`w-full ${buttonClass}`}>Explore</Button>
             </Link>
           )}
         </div>

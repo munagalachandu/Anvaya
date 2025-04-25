@@ -13,30 +13,30 @@ import { Link } from 'react-router-dom';
 const upcomingEvents = [
   {
     id: '1',
-    title: 'Annual Cultural Fest 2023',
-    date: 'May 15-17, 2023',
-    venue: 'Main Auditorium',
-    image: '/placeholder.svg',
+    title: 'Lumina 2024',
+    date: 'Nov 9, 2024',
+    venue: 'CD Sagar Auditorium',
+    image: 'cultural.jpg',
     category: 'cultural',
     registrationUrl: '#',
     brochureUrl: '#'
   },
   {
     id: '2',
-    title: 'Tech Hackathon 2023',
-    date: 'June 5-7, 2023',
-    venue: 'CS Department',
-    image: '/placeholder.svg',
+    title: 'Aventus 3.0',
+    date: 'May 17-18, 2024',
+    venue: 'AIML Dept',
+    image: 'techaventus.jpg',
     category: 'technical',
     registrationUrl: '#',
     brochureUrl: '#'
   },
   {
     id: '3',
-    title: 'Inter-College Sports Meet',
-    date: 'May 28-30, 2023',
-    venue: 'University Grounds',
-    image: '/placeholder.svg',
+    title: 'Utsaha',
+    date: 'April 04-05, 2023',
+    venue: 'FootBall Ground',
+    image: 'sportutsaha.jpg',
     category: 'sports',
     registrationUrl: '#',
     brochureUrl: '#'
@@ -47,27 +47,27 @@ const recentEvents = [
   {
     id: '4',
     title: 'Web Development Workshop',
-    date: 'April 10, 2023',
+    date: 'April 10, 2025',
     venue: 'Online',
-    image: '/placeholder.svg',
+    image: 'webdev.jpg',
     category: 'workshops',
     isPast: true
   },
   {
     id: '5',
     title: 'Technical Symposium',
-    date: 'April 2-4, 2023',
+    date: 'April 2-4, 2025',
     venue: 'CS Department',
-    image: '/placeholder.svg',
+    image: 'tech.jpg',
     category: 'technical',
     isPast: true
   },
   {
     id: '6',
-    title: 'Classical Dance Competition',
-    date: 'March 15, 2023',
+    title: 'Cultural Competition',
+    date: 'March 15, 2025',
     venue: 'Main Auditorium',
-    image: '/placeholder.svg',
+    image: 'culturalevent.jpg',
     category: 'cultural',
     isPast: true
   }
@@ -110,33 +110,116 @@ const Index = () => {
         {/* Grid Navigation */}
         <GridNavigation />
         
-        {/* Dynamic Banner */}
-        <section className="bg-secondary py-16">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-center gap-8">
-              <div className="md:w-1/2 animate-fade-in">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">Welcome to Anvaya</h2>
-                <p className="text-lg text-gray-700 mb-6">
-                  Connecting students, faculty, and the community through enriching events 
-                  and experiences. Anvaya serves as a platform to showcase talent, foster 
-                  learning, and build lasting connections.
-                </p>
-                <div className="flex space-x-4">
-                  <Button variant="outline">Learn More</Button>
-                  <Button>Browse Events</Button>
-                </div>
-              </div>
-              <div className="md:w-1/2">
-                <img 
-                  src="/placeholder.svg" 
-                  alt="Anvaya Events" 
-                  className="rounded-lg shadow-lg w-full h-auto animate-slide-up" 
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-        
+  {/* Dynamic Banner with 3D Animation and Purple Gradients - All included */}
+<section className="relative min-h-[500px] flex items-center overflow-hidden">
+  {/* Base gradient background */}
+  <div className="absolute inset-0 bg-gradient-to-br from-purple-300 via-purple-200 to-pink-100">
+    {/* Animated 3D gradient shapes */}
+    <div className="absolute inset-0" style={{
+      background: `radial-gradient(circle at 20% 30%, rgba(216, 180, 254, 0.4) 0%, rgba(216, 180, 254, 0) 50%),
+                  radial-gradient(circle at 80% 60%, rgba(233, 213, 255, 0.4) 0%, rgba(233, 213, 255, 0) 60%),
+                  radial-gradient(circle at 50% 50%, rgba(245, 208, 254, 0.2) 0%, rgba(245, 208, 254, 0) 70%)`,
+    }}></div>
+    
+    {/* Moving background elements with inline animations */}
+    <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-purple-400/30 to-pink-300/30 rounded-full blur-3xl" 
+         style={{
+           animation: 'float 15s ease-in-out infinite',
+         }}></div>
+    <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-gradient-to-br from-purple-300/30 to-indigo-300/30 rounded-full blur-3xl" 
+         style={{
+           animation: 'float-delay 18s ease-in-out infinite',
+         }}></div>
+    
+    {/* 3D floating elements with inline animations */}
+    <div className="absolute top-1/4 left-1/4 w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-500 rounded-lg shadow-lg transform rotate-12 opacity-30"
+         style={{
+           animation: 'float 15s ease-in-out infinite',
+         }}></div>
+    <div className="absolute bottom-1/3 right-1/3 w-24 h-24 bg-gradient-to-br from-purple-300 to-pink-400 rounded-full shadow-lg opacity-20"
+         style={{
+           animation: 'float-delay 18s ease-in-out infinite',
+         }}></div>
+    <div className="absolute top-1/2 right-1/4 w-12 h-12 bg-gradient-to-br from-indigo-300 to-purple-400 rounded-lg shadow-lg transform -rotate-12 opacity-30"
+         style={{
+           animation: 'pulse 6s ease-in-out infinite',
+         }}></div>
+  </div>
+  
+  {/* Content with 3D effect */}
+  <div className="container mx-auto px-6 relative z-10">
+    <div className="max-w-3xl mx-auto text-center">
+      <h1 className="text-4xl md:text-6xl font-bold mb-6 text-purple-900 drop-shadow-md"
+          style={{
+            transition: 'transform 0.5s',
+            transformOrigin: 'center',
+            '&:hover': {
+              transform: 'scale(1.05)'
+            }
+          }}>
+        Welcome to Anvaya
+      </h1>
+      <p className="text-lg md:text-xl mb-8 text-purple-800 drop-shadow"
+         style={{
+           transition: 'all 0.5s',
+           '&:hover': {
+             transform: 'translateY(4px)'
+           }
+         }}>
+        Connecting students, faculty, and the community through enriching events 
+        and experiences. Anvaya serves as a platform to showcase talent, foster 
+        learning, and build lasting connections.
+      </p>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button 
+          variant="outline" 
+          className="text-purple-700 border-purple-400 hover:bg-purple-50 font-medium px-6 py-3 rounded-md shadow transition-all duration-300 hover:shadow-lg"
+          style={{
+            transition: 'all 0.3s',
+            '&:hover': {
+              transform: 'translateY(-4px)'
+            }
+          }}>
+          Learn More
+        </Button>
+        <Button 
+          className="bg-purple-600 text-white hover:bg-purple-700 font-medium px-6 py-3 rounded-md shadow-md transition-all duration-300 hover:shadow-lg"
+          style={{
+            transition: 'all 0.3s',
+            '&:hover': {
+              transform: 'translateY(-4px)'
+            }
+          }}>
+          Browse Events
+        </Button>
+      </div>
+    </div>
+  </div>
+  
+  {/* Foreground glass effect */}
+  <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white/20 to-transparent backdrop-blur-sm"></div>
+
+  {/* Embedded style for animations - this stays within the component */}
+  <style dangerouslySetInnerHTML={{__html: `
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+      100% { transform: translateY(0) rotate(0); }
+    }
+    
+    @keyframes float-delay {
+      0% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-15px) rotate(-5deg); }
+      100% { transform: translateY(0) rotate(0); }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1) rotate(-12deg); }
+      50% { transform: scale(1.1) rotate(-8deg); }
+      100% { transform: scale(1) rotate(-12deg); }
+    }
+  `}} />
+</section>
         {/* Carousel Section */}
         <section className="py-16">
           <div className="container mx-auto px-4">
