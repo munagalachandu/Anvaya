@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,7 +12,7 @@ import { PlusCircle, Calendar, Users, MapPin, Clock, CalendarDays, BookOpen, Use
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useToast } from '@/hooks/use-toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Mock data
 const mockMyEvents = [
@@ -64,6 +63,7 @@ const mockStudentParticipations = [
 
 const FacultyDashboard = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
   
   const handleAddEvent = () => {
@@ -73,8 +73,19 @@ const FacultyDashboard = () => {
       description: "Your event has been added successfully."
     });
   };
-
-  const handleVerifyParticipation = (studentId: string) => {
+  
+  const handleLogout = () => {
+    // Optional: Clear auth tokens, session data, etc.
+    toast({
+      title: "Logged out successfully",
+      description: "You have been logged out of the system."
+    });
+    
+    // Redirect to login page
+    navigate('/login');
+  };
+  
+  const handleVerifyParticipation = (studentId) => {
     toast({
       title: "Participation verified",
       description: "The student's participation has been verified."
@@ -99,7 +110,7 @@ const FacultyDashboard = () => {
               <Button asChild variant="outline" className="mr-2">
                 <Link to="/events/cultural">Events</Link>
               </Button>
-              <Button variant="destructive">Log Out</Button>
+              <Button variant="destructive" onClick={handleLogout}>Log Out</Button>
             </div>
           </div>
           

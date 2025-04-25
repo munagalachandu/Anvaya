@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +9,7 @@ import { Calendar, Upload, Award, MapPin, CalendarDays, Clock, CheckCircle } fro
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useToast } from '@/hooks/use-toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Mock data
 const mockRegisteredEvents = [
@@ -32,12 +31,24 @@ const mockRegisteredEvents = [
 
 const StudentDashboard = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const handleUpload = () => {
     toast({
       title: "Certificate uploaded",
       description: "Your certificate has been uploaded successfully."
     });
+  };
+
+  const handleLogout = () => {
+    // Optional: Clear auth tokens, session data, etc.
+    toast({
+      title: "Logged out successfully",
+      description: "You have been logged out of the system."
+    });
+    
+    // Redirect to login page
+    navigate('/login');
   };
 
   return (
@@ -58,7 +69,7 @@ const StudentDashboard = () => {
               <Button asChild variant="outline" className="mr-2">
                 <Link to="/events/cultural">Events</Link>
               </Button>
-              <Button variant="destructive">Log Out</Button>
+              <Button variant="destructive" onClick={handleLogout}>Log Out</Button>
             </div>
           </div>
           

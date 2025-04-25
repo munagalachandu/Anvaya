@@ -184,7 +184,7 @@ const LoginForm = () => {
                     </div>
                   </FormControl>
                   <FormDescription>
-                    For demo, use admin@example.com / password
+                    Enter the password
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

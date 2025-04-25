@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,7 +10,7 @@ import { Calendar, User, Award, CheckCircle, Clock, BookOpen, FileText } from 'l
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useToast } from '@/hooks/use-toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Mock data
 const mockParticipationLogs = [
@@ -93,26 +92,42 @@ const AdminDashboard = () => {
   const { toast } = useToast();
   const [filter, setFilter] = useState('all');
   const [isVenueDialogOpen, setIsVenueDialogOpen] = useState(false);
+  const navigate = useNavigate();
   
-  const handleVerifyParticipation = (studentId: string) => {
+  const handleVerifyParticipation = (studentId) => {
     toast({
       title: "Participation verified",
       description: `Student ID ${studentId} participation has been verified.`
     });
   };
   
-  const handleApproveVenue = (requestId: string) => {
+  const handleApproveVenue = (requestId) => {
     toast({
       title: "Venue request approved",
       description: "The venue booking request has been approved."
     });
   };
   
-  const handleRejectVenue = (requestId: string) => {
+  const handleRejectVenue = (requestId) => {
     toast({
       title: "Venue request rejected",
       description: "The venue booking request has been rejected."
     });
+  };
+
+  const handleLogout = () => {
+    // Here you would typically clear any auth tokens, user data from localStorage/sessionStorage
+    // For example:
+    // localStorage.removeItem('authToken');
+    // sessionStorage.removeItem('userData');
+    
+    toast({
+      title: "Logged out successfully",
+      description: "You have been logged out of the system."
+    });
+    
+    // Redirect to login page
+    navigate('/login');
   };
 
   // Filter participation logs based on selection
@@ -137,7 +152,12 @@ const AdminDashboard = () => {
               <Button asChild variant="outline" className="mr-2">
                 <Link to="/">Home</Link>
               </Button>
-              <Button variant="destructive">Log Out</Button>
+              <Button 
+                variant="destructive"
+                onClick={handleLogout}
+              >
+                Log Out
+              </Button>
             </div>
           </div>
           
