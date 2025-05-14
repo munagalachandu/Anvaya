@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -8,88 +8,216 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { PlusCircle, Calendar, Users, MapPin, Clock, CalendarDays, BookOpen, User, Award } from 'lucide-react';
+import { PlusCircle, Calendar, Users, MapPin, CalendarDays, BookOpen, User, Award, Check, X, ExternalLink } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useToast } from '@/hooks/use-toast';
-import { Link, useNavigate } from 'react-router-dom';
-
-// Mock data
-const mockMyEvents = [
-  {
-    id: '1',
-    title: 'Web Development Workshop',
-    date: 'June 15, 2023',
-    venue: 'Lab 101',
-    status: 'Upcoming',
-    participants: 35
-  },
-  {
-    id: '2',
-    title: 'Technical Symposium',
-    date: 'July 10-12, 2023',
-    venue: 'CS Department',
-    status: 'Planning',
-    participants: 0
-  }
-];
-
-const mockStudentParticipations = [
-  {
-    id: '1',
-    name: 'John Doe',
-    eventName: 'Web Development Workshop (April 2023)',
-    certificate: true,
-    placement: 'Participation',
-    verified: true
-  },
-  {
-    id: '2',
-    name: 'Jane Smith',
-    eventName: 'Technical Symposium (April 2023)',
-    certificate: true,
-    placement: '1st Place',
-    verified: true
-  },
-  {
-    id: '3',
-    name: 'David Wilson',
-    eventName: 'Technical Symposium (April 2023)',
-    certificate: true,
-    placement: '2nd Place',
-    verified: false
-  }
-];
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const FacultyDashboard = () => {
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [venue, setVenue] = useState('');
+  const [description, setDescription] = useState('');
+  const [guestName, setGuestName] = useState('');
+  const [guestContact, setGuestContact] = useState('');
+  const [sessionDetails, setSessionDetails] = useState('');
+
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
+  const [isCertificateDialogOpen, setIsCertificateDialogOpen] = useState(false);
+  const [selectedParticipation, setSelectedParticipation] = useState(null);
+  const [facevents, setFacevents] = useState([]);
+  const [studentParticipations, setStudentParticipations] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const facultyId = parseInt(localStorage.getItem("facultyId"));
+
+  useEffect(() => {
+    if (facultyId) {
+      fetchEvents(facultyId);
+      fetchStudentParticipations(facultyId);
+    } else {
+      toast({
+        title: "Error",
+        description: "Faculty ID not found. Please login again.",
+      });
+      navigate('/login');
+    }
+  }, [facultyId]);
+
+  const fetchEvents = async (facultyId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/fac_events/${Number(facultyId)}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
+        }
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch events");
+
+      const fetchedEvents = await response.json();
+      setFacevents(fetchedEvents);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch events. Please try again.",
+      });
+    }
+  };
+
+  const fetchStudentParticipations = async (facultyId) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`http://localhost:5000/student_events_verify/${facultyId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
+        }
+      });
+
+      if (response.status === 200) {
+        setStudentParticipations(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching student participations:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch student participations. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+ 
+  const handleAddEvent = async () => {
+    const facultyId = parseInt(localStorage.getItem("facultyId"));
   
-  const handleAddEvent = () => {
-    setIsEventDialogOpen(false);
-    toast({
-      title: "Event added",
-      description: "Your event has been added successfully."
-    });
+    if (!facultyId) {
+      toast({
+        title: "Error",
+        description: "Faculty ID not found. Please login again.",
+      });
+      return;
+    }
+    
+    const payload = {
+      title,
+      category,
+      start_date: startDate,
+      end_date: endDate,
+      venue,
+      description,
+      guest_name: guestName,
+      guest_contact: guestContact,
+      session_details: sessionDetails,
+    };
+    
+    try {
+      const response = await axios.post(`http://localhost:5000/fac_add_events/${Number(facultyId)}`, payload, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.status === 201) {
+        toast({
+          title: "Event added",
+          description: "Your event has been added successfully.",
+        });
+  
+        setIsEventDialogOpen(false);
+  
+        setTitle('');
+        setCategory('');
+        setStartDate('');
+        setEndDate('');
+        setVenue('');
+        setDescription('');
+        setGuestName('');
+        setGuestContact('');
+        setSessionDetails('');
+  
+        fetchEvents(Number(facultyId));
+      }
+    } catch (error) {
+      console.error("Failed to add event:", error);
+      if (error.response) {
+        toast({
+          title: "Error",
+          description: error.response.data.error || "Failed to add event. Please try again.",
+        });
+      } else if (error.request) {
+        toast({
+          title: "Error",
+          description: "No response from server. Please check your connection.",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Request failed. Please try again.",
+        });
+      }
+    }
   };
   
   const handleLogout = () => {
-    // Optional: Clear auth tokens, session data, etc.
     toast({
       title: "Logged out successfully",
       description: "You have been logged out of the system."
     });
+    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('facultyId');
     
-    // Redirect to login page
     navigate('/login');
   };
-  
-  const handleVerifyParticipation = (studentId) => {
-    toast({
-      title: "Participation verified",
-      description: "The student's participation has been verified."
-    });
+
+  const openCertificateDialog = (participation) => {
+    setSelectedParticipation(participation);
+    setIsCertificateDialogOpen(true);
+  };
+  const handleVerifyParticipation = async () => {
+    if (!selectedParticipation) return;
+    
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/verify_participation/${selectedParticipation.id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
+          }
+        }
+      );
+      
+      if (response.status === 200) {
+        toast({
+          title: "Participation verified",
+          description: "The student's participation has been verified successfully."
+        });
+        
+        setIsCertificateDialogOpen(false);
+        
+        // Update the local state to reflect the change
+        setStudentParticipations(prevParticipations => 
+          prevParticipations.map(p => 
+            p.id === selectedParticipation.id 
+              ? { ...p, verification: 'Verified' } 
+              : p
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Failed to verify participation:", error);
+      toast({
+        title: "Error",
+        description: error.response?.data?.error || "Failed to verify participation. Please try again.",
+      });
+    }
   };
 
   return (
@@ -105,10 +233,10 @@ const FacultyDashboard = () => {
             </div>
             <div className="mt-4 md:mt-0">
               <Button asChild variant="outline" className="mr-2">
-                <Link to="/">Home</Link>
+                <RouterLink to="/">Home</RouterLink>
               </Button>
               <Button asChild variant="outline" className="mr-2">
-                <Link to="/events/cultural">Events</Link>
+                <RouterLink to="/events/cultural">Events</RouterLink>
               </Button>
               <Button variant="destructive" onClick={handleLogout}>Log Out</Button>
             </div>
@@ -125,6 +253,8 @@ const FacultyDashboard = () => {
               <div className="flex justify-between items-center mt-6 mb-4">
                 <h2 className="text-xl font-bold">My Events</h2>
                 
+               
+
                 <Dialog open={isEventDialogOpen} onOpenChange={setIsEventDialogOpen}>
                   <DialogTrigger asChild>
                     <Button className="flex items-center space-x-2">
@@ -144,12 +274,12 @@ const FacultyDashboard = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="event-title">Event Title</Label>
-                          <Input id="event-title" placeholder="Enter event title" />
+                          <Input id="event-title" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Enter event title" />
                         </div>
                         
                         <div className="space-y-2">
                           <Label htmlFor="event-category">Category</Label>
-                          <Select>
+                          <Select value={category} onValueChange={(val)=>setCategory(val)}>
                             <SelectTrigger>
                               <SelectValue placeholder="Select category" />
                             </SelectTrigger>
@@ -166,40 +296,40 @@ const FacultyDashboard = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="start-date">Start Date</Label>
-                          <Input id="start-date" type="date" />
+                          <Input id="start-date" type="date" value={startDate} onChange={e => setStartDate(e.target.value)}/>
                         </div>
                         
                         <div className="space-y-2">
                           <Label htmlFor="end-date">End Date</Label>
-                          <Input id="end-date" type="date" />
+                          <Input id="end-date" type="date" value={endDate} onChange= { e=>setEndDate(e.target.value)} />
                         </div>
                       </div>
                       
                       <div className="space-y-2">
                         <Label htmlFor="venue">Venue</Label>
-                        <Input id="venue" placeholder="Enter venue" />
+                        <Input id="venue" placeholder="Enter venue" value={venue} onChange= { e=>setVenue(e.target.value)}  />
                       </div>
                       
                       <div className="space-y-2">
                         <Label htmlFor="description">Description</Label>
-                        <Textarea id="description" placeholder="Enter event description" rows={3} />
+                        <Textarea id="description" placeholder="Enter event description" rows={3}value={description} onChange= { e=>setDescription(e.target.value)}  />
                       </div>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="guest-name">Guest/Speaker Name</Label>
-                          <Input id="guest-name" placeholder="Enter name if applicable" />
+                          <Input id="guest-name" placeholder="Enter name if applicable" value={guestName} onChange= { e=>setGuestName(e.target.value)} />
                         </div>
                         
                         <div className="space-y-2">
                           <Label htmlFor="guest-contact">Guest/Speaker Contact</Label>
-                          <Input id="guest-contact" placeholder="Enter contact details" />
+                          <Input id="guest-contact" placeholder="Enter contact details" value={guestContact} onChange= { e=>setGuestContact(e.target.value)} />
                         </div>
                       </div>
                       
                       <div className="space-y-2">
                         <Label htmlFor="session-details">Session Details</Label>
-                        <Textarea id="session-details" placeholder="Enter session details, schedule, etc." rows={3} />
+                        <Textarea id="session-details" placeholder="Enter session details, schedule, etc." rows={3} value={sessionDetails} onChange= { e=>setSessionDetails(e.target.value)} />
                       </div>
                     </div>
                     
@@ -212,7 +342,7 @@ const FacultyDashboard = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {mockMyEvents.map(event => (
+                {facevents.map(event => (
                   <Card key={event.id} className="animate-fade-in">
                     <CardHeader>
                       <div className="flex justify-between items-start">
@@ -252,7 +382,80 @@ const FacultyDashboard = () => {
                     </Card>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[600px]">
-                    {/* Same content as the dialog above */}
+                    <DialogHeader>
+                      <DialogTitle>Add New Event</DialogTitle>
+                      <DialogDescription>
+                        Enter the details of the event you're coordinating
+                      </DialogDescription>
+                    </DialogHeader>
+                    
+                    <div className="grid gap-4 py-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="event-title">Event Title</Label>
+                          <Input id="event-title" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Enter event title" />
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="event-category">Category</Label>
+                          <Select value={category} onValueChange={(val)=>setCategory(val)}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="cultural">Cultural</SelectItem>
+                              <SelectItem value="technical">Technical</SelectItem>
+                              <SelectItem value="sports">Sports</SelectItem>
+                              <SelectItem value="workshops">Workshops</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="start-date">Start Date</Label>
+                          <Input id="start-date" type="date" value={startDate} onChange={e => setStartDate(e.target.value)}/>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="end-date">End Date</Label>
+                          <Input id="end-date" type="date" value={endDate} onChange= { e=>setEndDate(e.target.value)} />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="venue">Venue</Label>
+                        <Input id="venue" placeholder="Enter venue" value={venue} onChange= { e=>setVenue(e.target.value)}  />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="description">Description</Label>
+                        <Textarea id="description" placeholder="Enter event description" rows={3}value={description} onChange= { e=>setDescription(e.target.value)}  />
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="guest-name">Guest/Speaker Name</Label>
+                          <Input id="guest-name" placeholder="Enter name if applicable" value={guestName} onChange= { e=>setGuestName(e.target.value)} />
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="guest-contact">Guest/Speaker Contact</Label>
+                          <Input id="guest-contact" placeholder="Enter contact details" value={guestContact} onChange= { e=>setGuestContact(e.target.value)} />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="session-details">Session Details</Label>
+                        <Textarea id="session-details" placeholder="Enter session details, schedule, etc." rows={3} value={sessionDetails} onChange= { e=>setSessionDetails(e.target.value)} />
+                      </div>
+                    </div>
+                    
+                    <DialogFooter>
+                      <Button variant="outline" onClick={() => setIsEventDialogOpen(false)}>Cancel</Button>
+                      <Button onClick={handleAddEvent}>Add Event</Button>
+                    </DialogFooter>
                   </DialogContent>
                 </Dialog>
               </div>
@@ -267,40 +470,141 @@ const FacultyDashboard = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="rounded-md border">
-                    <div className="grid grid-cols-12 gap-4 p-4 font-medium bg-gray-50 border-b">
-                      <div className="col-span-3">Student</div>
-                      <div className="col-span-5">Event</div>
-                      <div className="col-span-2">Placement</div>
-                      <div className="col-span-2">Action</div>
+                  {loading ? (
+                    <div className="flex justify-center p-8">
+                      <div className="animate-spin h-8 w-8 border-4 border-gray-300 rounded-full border-t-blue-600"></div>
                     </div>
-                    
-                    {mockStudentParticipations.map(student => (
-                      <div key={student.id} className="grid grid-cols-12 gap-4 p-4 items-center border-b last:border-b-0">
-                        <div className="col-span-3 flex items-center gap-2">
-                          <User size={18} className="text-gray-500" />
-                          <span>{student.name}</span>
+                  ) : studentParticipations.length > 0 ? (
+                    <div className="rounded-md border">
+                      <div className="grid grid-cols-12 gap-4 p-4 font-medium bg-gray-50 border-b">
+                        <div className="col-span-3">Student</div>
+                        <div className="col-span-4">Achievement</div>
+                        <div className="col-span-3">Placement</div>
+                        <div className="col-span-2">Status</div>
+                      </div>
+                      
+                      {studentParticipations.map(participation => (
+                        <div key={participation.id} className="grid grid-cols-12 gap-4 p-4 items-center border-b last:border-b-0">
+                          <div className="col-span-3 flex items-center gap-2">
+                            <User size={18} className="text-gray-500" />
+                            <span>{participation.name}</span>
+                          </div>
+                          <div className="col-span-4">{participation.title}</div>
+                          <div className="col-span-3">
+                            <Badge variant="outline" className="flex items-center gap-1 w-fit">
+                              <Award size={14} /> {participation.placement || 'Participation'}
+                            </Badge>
+                          </div>
+                          <div className="col-span-2 flex gap-2">
+                            {participation.verification === 'Verified' ? (
+                              <Badge variant="secondary" className="w-fit flex items-center gap-1">
+                                <Check size={14} /> Verified
+                              </Badge>
+                            ) : (
+                              <Button 
+                                size="sm" 
+                                onClick={() => openCertificateDialog(participation)} 
+                                variant="outline" 
+                                className="flex items-center gap-1"
+                              >
+                                <Award size={14} /> Verify
+                              </Button>
+                            )}
+                          </div>
                         </div>
-                        <div className="col-span-5">{student.eventName}</div>
-                        <div className="col-span-2">
-                          <Badge variant="outline" className="flex items-center gap-1 w-fit">
-                            <Award size={14} /> {student.placement}
-                          </Badge>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center p-8 bg-gray-50 rounded-md">
+                      <User size={36} className="mx-auto text-gray-400 mb-4" />
+                      <h3 className="text-lg font-medium text-gray-700 mb-2">No Participations Found</h3>
+                      <p className="text-gray-500">
+                        There are currently no student participations to verify for your events.
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+              
+              <Dialog open={isCertificateDialogOpen} onOpenChange={setIsCertificateDialogOpen}>
+                <DialogContent className="sm:max-w-[700px]">
+                  <DialogHeader>
+                    <DialogTitle>Verify Student Achievement</DialogTitle>
+                    <DialogDescription>
+                      Review the certificate and confirm the student's achievement
+                    </DialogDescription>
+                  </DialogHeader>
+                  
+                  {selectedParticipation && (
+                    <div className="py-4 space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label className="font-medium">Student Name:</Label>
+                          <p>{selectedParticipation.name}</p>
                         </div>
-                        <div className="col-span-2">
-                          {student.verified ? (
-                            <Badge variant="secondary" className="w-fit">Verified</Badge>
+                        <div>
+                          <Label className="font-medium">Achievement:</Label>
+                          <p>{selectedParticipation.title}</p>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <Label className="font-medium">Placement:</Label>
+                        <p>{selectedParticipation.placement || 'Participation'}</p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label className="font-medium">Certificate:</Label>
+                        <div className="border rounded-md p-2">
+                          {selectedParticipation.certificate.match(/\.(jpeg|jpg|png|gif)$/i) ? (
+                            <img 
+                              src={selectedParticipation.certificate} 
+                              alt="Achievement Certificate" 
+                              className="w-full object-contain max-h-96"
+                              onError={() => {
+                                toast({
+                                  title: "Error loading certificate",
+                                  description: "Could not load the certificate image.",
+                                  variant: "destructive"
+                                });
+                              }} 
+                            />
                           ) : (
-                            <Button size="sm" onClick={() => handleVerifyParticipation(student.id)}>
-                              Verify
-                            </Button>
+                            <div className="flex items-center gap-2">
+                              <a 
+                                href={selectedParticipation.certificate} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="text-blue-600 hover:underline"
+                              >
+                                View Certificate
+                              </a>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => window.open(selectedParticipation.certificate, '_blank')}
+                              >
+                                <ExternalLink size={16} />
+                              </Button>
+                            </div>
                           )}
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                    </div>
+                  )}
+                  
+                  <DialogFooter className="flex justify-between sm:justify-between">
+                    <Button variant="outline" onClick={() => setIsCertificateDialogOpen(false)}>
+                      <X size={16} className="mr-2" />
+                      Cancel
+                    </Button>
+                    <Button onClick={handleVerifyParticipation}>
+                      <Check size={16} className="mr-2" />
+                      Verify Achievement
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </TabsContent>
             
             <TabsContent value="venue">

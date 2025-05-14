@@ -101,9 +101,9 @@ const Footer = () => {
               <MapPin size={16} className="text-purple-300 mt-1 flex-shrink-0 group-hover:text-white" />
               <div>
                 <address className="text-sm text-purple-100 not-italic group-hover:text-white transition-colors duration-300">
-                  Department of Computer Science,<br />
-                  University Campus,<br />
-                  City, State - 560001
+                  Department of Artificial Intelligence and Machine Learning,<br />
+                  Kumarswamy Layout,<br />
+                  Bengaluru, Karnataka - 560078
                 </address>
                 <a href="https://goo.gl/maps" target="_blank" rel="noopener noreferrer" 
                    className="inline-flex items-center bg-white text-purple-800 hover:bg-purple-50 px-2 py-1 rounded-full text-xs font-medium mt-2 shadow transform hover:scale-105 transition-all duration-300">

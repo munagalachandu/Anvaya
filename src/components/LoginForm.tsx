@@ -67,22 +67,30 @@ const LoginForm = () => {
       });
 
       const result = await response.json();
-
+      
       if (response.ok && result.success) {
+        const token = result.token;
+        const id=result.user.id;
+        localStorage.setItem('jwt_token', token);
+        
         toast({
           title: "Login successful",
-          description: result.message || `Welcome back, ${role}!`,
+          description: `Welcome back, ${role}!`,
         });
 
         switch (role) {
           case 'student':
-            navigate('/dashboard/student');
+            
+            navigate(`/dashboard/student`);
+            localStorage.setItem('studentId',id.toString());
             break;
           case 'faculty':
-            navigate('/dashboard/faculty');
+            localStorage.setItem('facultyId',id.toString());
+            navigate(`/dashboard/faculty`);
             break;
           case 'admin':
-            navigate('/dashboard/admin');
+            localStorage.setItem('adminId',id.toString());
+            navigate(`/dashboard/admin`);
             break;
           default:
             navigate('/');
@@ -90,21 +98,20 @@ const LoginForm = () => {
       } else {
         toast({
           title: "Login failed",
-          description: result.message || "Invalid email or password. Please try again.",
+          description: "Invalid email or password. Please try again.",
           variant: "destructive",
         });
       }
     } catch (error) {
       toast({
-        title: "An error occurred",
-        description: "Please try again later.",
+        title: "Login error",
+        description: "Something went wrong. Please try again later.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
-
   const roleLabels = {
     'student': 'Student Login',
     'faculty': 'Faculty Login',
