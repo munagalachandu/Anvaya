@@ -5,3 +5,5 @@ Flask-cors
 python-dotenv
 Flask-JWT-Extended
 PyJWT
+
+cloudinary
