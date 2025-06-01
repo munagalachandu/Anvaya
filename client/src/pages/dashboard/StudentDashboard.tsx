@@ -27,7 +27,7 @@ const StudentDashboard = () => {
   const [placement, setPlacement] = useState('');
   const [certificateFile, setCertificateFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-  const studentId = parseInt(localStorage.getItem("studentId"));
+  const studentId = localStorage.getItem("studentId");
   const [allEvents, setAllEvents] = useState([]);
   const [loadingAllEvents, setLoadingAllEvents] = useState(true);
   const [eventError, setEventError] = useState('');
@@ -60,7 +60,7 @@ const StudentDashboard = () => {
   const fetchRegisteredEvents = async (studentId) => {
     setLoadingEvents(true);
     try {
-      const response = await axios.get(`http://localhost:5001/student_events/${studentId}`, {
+      const response = await axios.get(`http://localhost:5001/api/student_events/${studentId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
         }
@@ -83,7 +83,7 @@ const StudentDashboard = () => {
   const fetchAchievements = async (studentId) => {
     setLoadingAchievements(true);
     try {
-      const response = await axios.get(`http://localhost:5001/student_achievements/${studentId}`, {
+      const response = await axios.get(`http://localhost:5001/api/student_achievements/${studentId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
         }
@@ -104,7 +104,7 @@ const StudentDashboard = () => {
   };
 
   const handleUploadAchievement = async () => {
-    if (!eventName || !eventDate || !venue || !certificateFile) {
+    if (!eventName || !eventDate || !venue ) {
       toast({
         title: "Error",
         description: "Please fill in all required fields and upload a certificate file.",
@@ -115,46 +115,48 @@ const StudentDashboard = () => {
     setIsUploading(true);
 
     // Create form data to send file
-    const formData = new FormData();
-    formData.append('event_name', eventName);
-    formData.append('event_date', eventDate);
-    formData.append('venue', venue);
-    formData.append('placement', placement);
-    formData.append('certificate', certificateFile);
+const formData = new FormData();
+formData.append('event_name', eventName);
+formData.append('event_date', eventDate);
+formData.append('venue', venue);
+formData.append('placement', placement);
 
-    try {
-      const response = await axios.post(
-        `http://localhost:5001/student_add_achievement/${studentId}`, 
-        formData, 
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      );
+// Append certificate file or an empty string if no file is uploaded
+formData.append('certificate', certificateFile || ''); // Use an empty string if certificateFile is null
 
-      if (response.status === 201) {
-        toast({
-          title: "Achievement uploaded",
-          description: "Your achievement has been uploaded successfully and is pending verification.",
-        });
-
-        setEventName('');
-        setEventDate('');
-        setVenue('');
-        setPlacement('');
-        setCertificateFile(null);
-
-        fetchAchievements(studentId);
+try {
+  const response = await axios.post(
+    `http://localhost:5001/api/student_add_achievement/${studentId}`, 
+    formData, 
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+        'Content-Type': 'multipart/form-data'
       }
-    } catch (error) {
-      console.error("Failed to upload achievement:", error);
-      toast({
-        title: "Error",
-        description: error.response?.data?.error || "Failed to upload achievement. Please try again.",
-      });
-    } finally {
+    }
+  );
+
+  if (response.status === 201) {
+    toast({
+      title: "Achievement uploaded",
+      description: "Your achievement has been uploaded successfully and is pending verification.",
+    });
+
+    // Reset form fields
+    setEventName('');
+    setEventDate('');
+    setVenue('');
+    setPlacement('');
+    setCertificateFile(null);
+  }
+} catch (error) {
+  console.error("Failed to upload achievement:", error);
+  toast({
+    title: "Error",
+    description: error.response?.data?.error || "Failed to upload achievement. Please try again.",
+  });
+}
+     finally {
       setIsUploading(false);
     }
   };
@@ -408,7 +410,7 @@ const StudentDashboard = () => {
                         >
                           <div className="col-span-3">
                             <div className="font-medium">{achievement.event_name}</div>
-                            <div className="text-sm text-gray-500">{achievement.date}</div>
+                            <div className="text-sm text-gray-500">{new Date (achievement.date).toLocaleDateString()}</div>
                             <div className="text-sm text-gray-500">{achievement.venue}</div>
                           </div>
                           <div className="col-span-3">

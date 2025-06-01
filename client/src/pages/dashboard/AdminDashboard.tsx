@@ -71,7 +71,7 @@ const StudentAchievementsDashboard = () => {
         return;
       }
 
-      const response = await axios.get(`http://localhost:5001/student_events_verify/${adminId}`, {
+      const response = await axios.get(`http://localhost:5001/api/student_events_verify/${adminId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
         }
@@ -176,7 +176,7 @@ const StudentAchievementsDashboard = () => {
   const handleVerifyAchievement = async (achievementId) => {
     try {
       const response = await axios.post(
-        `http://localhost:5001/verify_participation/${achievementId}`,
+        `http://localhost:5001/api/verify_participation/${achievementId}`,
         {},
         {
           headers: {
@@ -195,11 +195,13 @@ const StudentAchievementsDashboard = () => {
         
         // Update the local state to reflect the change
         setStudentAchievements(prevAchievements => 
-          prevAchievements.map(a => 
-            a.id === achievementId 
-              ? { ...a, verification: 'Verified' } 
-              : a
+          prevAchievements.length>=0
+            ?prevAchievements.map(a => 
+              a.id === achievementId 
+                ? { ...a, verification: 'Verified' } 
+                : a
           )
+        :[]
         );
         
         // Update statistics

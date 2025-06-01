@@ -49,7 +49,7 @@ const FacultyDashboard = () => {
   const [facevents, setFacevents] = useState([]);
   const [studentParticipations, setStudentParticipations] = useState([]);
   const [loading, setLoading] = useState(false);
-  const facultyId = parseInt(localStorage.getItem("facultyId"));
+  const facultyId = localStorage.getItem("facultyId");
   const [bookings, setBookings] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedClassroom, setSelectedClassroom] = useState('');
@@ -118,12 +118,12 @@ const FacultyDashboard = () => {
   const fetchStudentParticipations = async (facultyId) => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:5001/student_events_verify/`, {
+      const response = await axios.get(`http://localhost:5001/api/student_events_verify`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
         }
       });
-
+  
       if (response.status === 200) {
         setStudentParticipations(response.data);
       }
@@ -224,7 +224,7 @@ const FacultyDashboard = () => {
     
     try {
       const response = await axios.post(
-        `http://localhost:5001/verify_participation/${selectedParticipation.id}`,
+        `http://localhost:5001/api/verify_participation/${selectedParticipation.id}`,
         {},
         {
           headers: {
