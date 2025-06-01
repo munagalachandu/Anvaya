@@ -6,6 +6,8 @@ import authRoutes from './routes/auth.js';
 import eventRoutes from './routes/events.js';
 import achievementRoutes from './routes/achievements.js';
 import classroomRoutes from './routes/classrooms.js';
+import User from './models/User.js'; // Import the User model
+import bcrypt from 'bcryptjs';
 
 dotenv.config();
 
@@ -17,8 +19,35 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-  .then(() => console.log('MongoDB connected'))
+  .then(() => {
+    console.log('MongoDB connected');
+    seedUsers(); 
+  })
   .catch((err) => console.error('MongoDB connection error:', err));
+
+// Function to seed users
+const seedUsers = async () => {
+  try {
+    const hashedPassword1 = await bcrypt.hash('password123', 10);
+    const hashedPassword2 = await bcrypt.hash('password456', 10);
+    const hashedPassword3 = await bcrypt.hash('password789', 10);
+    const hashedPassword4 = await bcrypt.hash('password101', 10);
+
+    const users = [
+      { name: 'Admin User', email: 'admin@example.com', password: hashedPassword1, role: 'admin' },
+      { name: 'Faculty User', email: 'faculty@example.com', password: hashedPassword2, role: 'faculty' },
+      { name: 'Student One', email: 'student1@example.com', password: hashedPassword3, role: 'student' },
+      { name: 'Student Two', email: 'student2@example.com', password: hashedPassword4, role: 'student' },
+    ];
+
+    
+    await User.deleteMany(); // Clear existing users to avoid duplicates
+    const insertedUsers = await User.insertMany(users);
+    console.log('Users seeded successfully:', insertedUsers);
+  } catch (error) {
+    console.error('Error seeding users:', error);
+  }
+};
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
@@ -28,4 +57,4 @@ app.use('/api', achievementRoutes);
 app.use('/api', classroomRoutes);
 
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); 
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
 const router = express.Router();
+import mongoose from 'mongoose';
 
 router.post('/login', async (req, res) => {
   const { email, password, role } = req.body;

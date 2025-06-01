@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import Classroom from '../models/Classroom.js';
 
-dotenv.config();
+dotenv.config({path: '../.env'});
 
 const MONGO_URI = process.env.MONGO_URI;
 

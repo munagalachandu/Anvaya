@@ -7,7 +7,7 @@ const achievementSchema = new mongoose.Schema({
   venue: { type: String },
   placement: { type: String },
   verification: { type: String, enum: ['Verified', 'Pending', 'Rejected'], default: 'Pending' },
-  achievement_certificate: { type: String, required: true }
+  achievement_certificate: { type: String, required: false }
 }, { timestamps: true });
 
 const Achievement = mongoose.model('Achievement', achievementSchema);

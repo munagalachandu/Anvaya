@@ -7,7 +7,7 @@ const TimetableEntry = require('../models/TimetableEntry');
 const timetablePath = path.join(__dirname, '../timetable.json');
 const timetableData = JSON.parse(fs.readFileSync(timetablePath, 'utf-8'));
 
-mongoose.connect('mongodb://localhost:27017/anvaya', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://aimldept:jANKdMskfF7CbxuE@anvaya.hqxceho.mongodb.net/Demo?retryWrites=true&w=majority&appName=Anvaya', { useNewUrlParser: true, useUnifiedTopology: true });
 
 async function importTimetable() {
   const { semester, section, room_number, session, timetable } = timetableData;
