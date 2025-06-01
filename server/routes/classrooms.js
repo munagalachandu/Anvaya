@@ -1,148 +1,111 @@
 import express from 'express';
-import Classroom from '../models/Classroom.js';
-import Booking from '../models/Booking.js';
-import User from '../models/User.js';
-import jwt from 'jsonwebtoken';
-import TimetableEntry from '../models/TimetableEntry.js';
+import fs from 'fs';
+import path from 'path';
 
 const router = express.Router();
 
-const verifyToken = (req, res, next) => {
-  const token = req.headers['authorization'];
-  if (!token) return res.status(401).json({ error: 'Authorization token is missing' });
+// Utility to normalize room names
+const normalizeRoom = str => str ? str.toLowerCase().replace(/\s+/g, '').replace('room', 'room-').replace('room--', 'room-') : str;
+
+// GET /api/classroom-timetable?date=YYYY-MM-DD&classroom=Room-X or ?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD&classroom=Room-X
+router.get('/api/classroom-timetable', async (req, res) => {
+  let { date, startDate, endDate, classroom } = req.query;
+  if (!classroom || (!date && (!startDate || !endDate))) {
+    return res.status(400).json({ error: 'Date or date range and classroom are required' });
+  }
   try {
-    const decoded = jwt.verify(token.replace('Bearer ', ''), process.env.SECRET_KEY);
-    req.user = decoded;
-    next();
-  } catch {
-    return res.status(401).json({ error: 'Invalid or expired token' });
+    const timetablePath = path.join(process.cwd(), 'routes', '2nd-year.json');
+    console.log('Resolved timetable path:', timetablePath);
+    if (!fs.existsSync(timetablePath)) {
+      console.error('Timetable JSON file does not exist at:', timetablePath);
+      return res.status(500).json({ error: 'Timetable data file not found on server.' });
+    }
+    let timetableRaw;
+    try {
+      timetableRaw = fs.readFileSync(timetablePath, 'utf-8');
+    } catch (readErr) {
+      console.error('Error reading timetable JSON file:', readErr);
+      return res.status(500).json({ error: 'Failed to read timetable data file.' });
+    }
+    let timetable;
+    try {
+      timetable = JSON.parse(timetableRaw);
+    } catch (parseErr) {
+      console.error('Error parsing timetable JSON file:', parseErr);
+      return res.status(500).json({ error: 'Timetable data file is not valid JSON.' });
+    }
+    // Get the top-level year if present
+    const defaultYear = timetable.year ? timetable.year : undefined;
+    const allSlots = [
+      '09:00-10:00', '10:00-11:00', '11:15-12:15', '12:15-13:15',
+      '13:15-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00'
+    ];
+    const normalize = str => str ? str.toLowerCase().replace(/\s+/g, '').replace('room', 'room-').replace('room--', 'room-') : str;
+    const normClassroom = normalize(classroom);
+    // Helper to process a single date
+    const processDate = (dateKey) => {
+      const dayData = timetable[dateKey];
+      const slots = {};
+      if (!dayData) {
+        allSlots.forEach(slot => {
+          slots[slot] = { status: 'Available', subject: null, year: defaultYear };
+        });
+        return slots;
+      }
+      allSlots.forEach(slot => {
+        const info = dayData[slot];
+        if (!info) {
+          slots[slot] = { status: 'Available', subject: null, year: defaultYear };
+        } else if (info.subject === 'Lunch Break') {
+          slots[slot] = { status: 'Lunch Break', subject: 'Lunch Break', year: defaultYear };
+        } else if (normalize(info.room) === normClassroom) {
+          slots[slot] = {
+            status: 'Occupied',
+            subject: info.subject,
+            year: info.year || defaultYear
+          };
+        } else {
+          slots[slot] = { status: 'Available', subject: null, year: defaultYear };
+        }
+      });
+      return slots;
+    };
+    // Date range logic
+    let result = {};
+    if (date) {
+      // Convert YYYY-MM-DD to DD-MM-YYYY
+      let [yyyy, mm, dd] = date.split('-');
+      let dateKey = `${dd}-${mm}-${yyyy}`;
+      result[date] = processDate(dateKey);
+      // If the date is not in the timetable, ensure all slots are 'Available'
+      if (!timetable[dateKey]) {
+        const slots = {};
+        allSlots.forEach(slot => { slots[slot] = 'Available'; });
+        result[date] = slots;
+      }
+    } else {
+      // Range
+      let start = new Date(startDate);
+      let end = new Date(endDate);
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        let yyyy = d.getFullYear();
+        let mm = String(d.getMonth() + 1).padStart(2, '0');
+        let dd = String(d.getDate()).padStart(2, '0');
+        let dateKey = `${dd}-${mm}-${yyyy}`;
+        let isoDate = `${yyyy}-${mm}-${dd}`;
+        result[isoDate] = processDate(dateKey);
+        // If the date is not in the timetable, ensure all slots are 'Available'
+        if (!timetable[dateKey]) {
+          const slots = {};
+          allSlots.forEach(slot => { slots[slot] = 'Available'; });
+          result[isoDate] = slots;
+        }
+      }
+    }
+    res.json({ classroom, timetable: result });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to read timetable data' });
   }
-};
-
-// List all classrooms
-router.get('/classrooms', verifyToken, async (req, res) => {
-  const classrooms = await Classroom.find();
-  res.json(classrooms);
-});
-
-// Get bookings for a day and year
-router.get('/bookings', verifyToken, async (req, res) => {
-  const { date, year } = req.query;
-  const filter = {};
-  if (date) filter.date = date;
-  if (year) filter.year = Number(year);
-  const bookings = await Booking.find(filter).populate('classroom requestedBy approvedBy');
-  res.json(bookings);
-});
-
-// Get timetable for a specific date (regular classes + bookings)
-router.get('/timetable', verifyToken, async (req, res) => {
-  const { date } = req.query;
-  if (!date) return res.status(400).json({ error: 'Date required' });
-  const dayOfWeek = new Date(date).toLocaleDateString('en-US', { weekday: 'long' });
-  // Get all timetable entries for that day
-  const timetableEntries = await TimetableEntry.find({ day_of_week: dayOfWeek });
-  // Get all bookings for that date
-  const bookings = await Booking.find({ date }).populate('classroom requestedBy approvedBy');
-  res.json({ timetable: timetableEntries, bookings });
-});
-
-// Get available classrooms for a date and slot
-router.get('/classrooms/available', verifyToken, async (req, res) => {
-  const { date, slot } = req.query;
-  if (!date || !slot) return res.status(400).json({ error: 'Date and slot required' });
-  const dayOfWeek = new Date(date).toLocaleDateString('en-US', { weekday: 'long' });
-  // Find all classrooms
-  const allClassrooms = await Classroom.find();
-  // Find classrooms occupied in timetable
-  const occupiedByTimetable = await TimetableEntry.find({ day_of_week: dayOfWeek, slot });
-  const occupiedClassroomsTimetable = occupiedByTimetable.map(e => e.classroom);
-  // Find classrooms booked for that date/slot
-  const bookings = await Booking.find({ date, slot, status: { $in: ['pending', 'approved'] } });
-  const occupiedClassroomsBooking = bookings.map(b => b.classroom.toString());
-  // Filter out occupied classrooms
-  const available = allClassrooms.filter(room =>
-    !occupiedClassroomsTimetable.includes(room.name) &&
-    !occupiedClassroomsBooking.includes(room._id.toString())
-  );
-  res.json(available);
-});
-
-// Update booking request logic to check for timetable and booking conflicts
-router.post('/bookings/request', verifyToken, async (req, res) => {
-  const { classroomId, date, slot, year } = req.body;
-  if (!classroomId || !date || !slot || !year) return res.status(400).json({ error: 'Missing fields' });
-  // Check timetable conflict
-  const classroomDoc = await Classroom.findById(classroomId);
-  const dayOfWeek = new Date(date).toLocaleDateString('en-US', { weekday: 'long' });
-  const timetableConflict = await TimetableEntry.findOne({ classroom: classroomDoc.name, day_of_week: dayOfWeek, slot });
-  if (timetableConflict) {
-    return res.status(409).json({ error: 'Classroom is occupied by a regular class at this time.' });
-  }
-  // Check booking conflict
-  const bookingConflict = await Booking.findOne({ classroom: classroomId, date, slot, status: { $in: ['pending', 'approved'] } });
-  if (bookingConflict) {
-    return res.status(409).json({ error: 'Classroom is already booked for this slot.' });
-  }
-  const booking = new Booking({
-    classroom: classroomId,
-    date,
-    slot,
-    year,
-    requestedBy: req.user.user_id,
-    status: 'pending'
-  });
-  await booking.save();
-  res.status(201).json({ success: true, booking });
-});
-
-// Approve a booking (admin)
-router.post('/bookings/:bookingId/approve', verifyToken, async (req, res) => {
-  const { bookingId } = req.params;
-  const booking = await Booking.findByIdAndUpdate(
-    bookingId,
-    { status: 'approved', approvedBy: req.user.user_id },
-    { new: true }
-  );
-  res.json({ success: true, booking });
-});
-
-// Reject a booking (admin)
-router.post('/bookings/:bookingId/reject', verifyToken, async (req, res) => {
-  const { bookingId } = req.params;
-  const booking = await Booking.findByIdAndUpdate(
-    bookingId,
-    { status: 'rejected', approvedBy: req.user.user_id },
-    { new: true }
-  );
-  res.json({ success: true, booking });
-});
-
-// Get timetable for a year (returns all bookings for the year)
-router.get('/timetable', verifyToken, async (req, res) => {
-  const { year } = req.query;
-  if (!year) return res.status(400).json({ error: 'Year required' });
-  const bookings = await Booking.find({ year: Number(year) }).populate('classroom requestedBy approvedBy');
-  res.json(bookings);
-});
-
-// Get timetable for a specific year and section
-router.get('/timetable/by-year', verifyToken, async (req, res) => {
-  const { year, section } = req.query;
-  if (!year || !section) return res.status(400).json({ error: 'Year and section required' });
-  // Find all entries for this year/section
-  const entries = await TimetableEntry.find({ semester: year, section });
-  // Build timetable structure
-  const timetable = {};
-  const slotSet = new Set();
-  entries.forEach(entry => {
-    if (!timetable[entry.day_of_week]) timetable[entry.day_of_week] = {};
-    timetable[entry.day_of_week][entry.slot] = entry.subject;
-    slotSet.add(entry.slot);
-  });
-  // Sort slots
-  const slots = Array.from(slotSet).sort();
-  res.json({ timetable, slots });
 });
 
 export default router; 

@@ -1,0 +1,3505 @@
+{
+  "year":2,
+  "01-02-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "03-02-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "04-02-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "05-02-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "06-02-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "07-02-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "08-02-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "10-02-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "11-02-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "12-02-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "13-02-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "14-02-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "15-02-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "17-02-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "18-02-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "19-02-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "20-02-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "21-02-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "22-02-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "24-02-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "25-02-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "26-02-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "27-02-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "28-02-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "01-03-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "03-03-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "04-03-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "05-03-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "06-03-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "07-03-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "08-03-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "10-03-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "11-03-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "12-03-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "13-03-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "14-03-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "15-03-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "17-03-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "18-03-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "19-03-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "20-03-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "21-03-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "22-03-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "24-03-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "25-03-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "26-03-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "27-03-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "28-03-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "29-03-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "31-03-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "01-04-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "02-04-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "03-04-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "04-04-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "05-04-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "07-04-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "08-04-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "09-04-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "10-04-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "11-04-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "12-04-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "14-04-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "15-04-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "16-04-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "17-04-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "18-04-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "19-04-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "21-04-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "22-04-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "23-04-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "24-04-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "25-04-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "26-04-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "28-04-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "29-04-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "30-04-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "01-05-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "02-05-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "03-05-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "05-05-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "06-05-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "07-05-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "08-05-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "09-05-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "10-05-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "12-05-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "13-05-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "14-05-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "15-05-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "16-05-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "17-05-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "19-05-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "20-05-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "21-05-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "22-05-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "23-05-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "24-05-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  },
+  "26-05-2025": {
+    "09:00-10:00": {
+      "subject": "OS",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 1"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "JAVA LAB \u2013 A1",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Library/MOOC",
+      "room": "Room 1"
+    }
+  },
+  "27-05-2025": {
+    "09:00-10:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 2"
+    },
+    "10:00-11:00": {
+      "subject": "DV/MLE Lab - A1",
+      "room": "Room 4"
+    },
+    "11:15-12:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "12:15-13:15": {
+      "subject": "DAA Lab",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "YOGA/PE/NSS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Proctor Meeting",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Office Hour",
+      "room": "Room 2"
+    }
+  },
+  "28-05-2025": {
+    "09:00-10:00": {
+      "subject": "UHV",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "DMS",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DAA",
+      "room": "Room 3"
+    },
+    "12:15-13:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS (Tutorial)",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 4"
+    },
+    "16:00-17:00": {
+      "subject": "Club/Professional Activities",
+      "room": "Room 2"
+    }
+  },
+  "29-05-2025": {
+    "09:00-10:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 1"
+    },
+    "10:00-11:00": {
+      "subject": "JAVA Lab - A2",
+      "room": "Room 3"
+    },
+    "11:15-12:15": {
+      "subject": "SE",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DMS",
+      "room": "Room 4"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 3"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 3"
+    }
+  },
+  "30-05-2025": {
+    "09:00-10:00": {
+      "subject": "SE",
+      "room": "Room 4"
+    },
+    "10:00-11:00": {
+      "subject": "DAA",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 2"
+    },
+    "12:15-13:15": {
+      "subject": "DV/MLE Lab - A2",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "OS",
+      "room": "Room 4"
+    },
+    "15:00-16:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 1"
+    },
+    "16:00-17:00": {
+      "subject": "Preplacement/Skill Dev/Value Added",
+      "room": "Room 2"
+    }
+  },
+  "31-05-2025": {
+    "09:00-10:00": {
+      "subject": "HPC",
+      "room": "Room 3"
+    },
+    "10:00-11:00": {
+      "subject": "MLE",
+      "room": "Room 2"
+    },
+    "11:15-12:15": {
+      "subject": "MLE",
+      "room": "Room 4"
+    },
+    "12:15-13:15": {
+      "subject": "MLE",
+      "room": "Room 1"
+    },
+    "13:15-14:00": {
+      "subject": "Lunch Break",
+      "room": null
+    },
+    "14:00-15:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 1"
+    },
+    "15:00-16:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 2"
+    },
+    "16:00-17:00": {
+      "subject": "Mini Project-I",
+      "room": "Room 4"
+    }
+  }
+}

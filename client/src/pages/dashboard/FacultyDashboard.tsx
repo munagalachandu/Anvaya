@@ -16,6 +16,20 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import axiosInstance from '../../lib/axiosInstance';
 
+const classroomList = ['Room 1', 'Room 2', 'Room 3', 'Room 4'];
+
+type SlotInfo = {
+  status: string;
+  subject: string | null;
+  year?: string | number;
+};
+
+type TimetablesType = {
+  [room: string]: {
+    [slot: string]: SlotInfo;
+  };
+};
+
 const FacultyDashboard = () => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
@@ -36,22 +50,22 @@ const FacultyDashboard = () => {
   const [studentParticipations, setStudentParticipations] = useState([]);
   const [loading, setLoading] = useState(false);
   const facultyId = parseInt(localStorage.getItem("facultyId"));
-  const [classrooms, setClassrooms] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
-  const [selectedYear, setSelectedYear] = useState(1);
   const [selectedClassroom, setSelectedClassroom] = useState('');
-  const [selectedSlot, setSelectedSlot] = useState('09:00-10:00');
-  const slots = [
+  const [classroomSlots, setClassroomSlots] = useState({});
+  const allSlots = [
     '09:00-10:00', '10:00-11:00', '11:15-12:15', '12:15-13:15',
-    '14:00-15:00', '15:00-16:00',
+    '13:15-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00',
   ];
   const [myBookings, setMyBookings] = useState([]);
-  const [availableClassrooms, setAvailableClassrooms] = useState([]);
-  const [timetableData, setTimetableData] = useState({ timetable: [], bookings: [] });
-  const [selectedSection, setSelectedSection] = useState('A');
-  const [dynamicSlots, setDynamicSlots] = useState([]);
-  const [dynamicTimetable, setDynamicTimetable] = useState({});
+  const [dateMode, setDateMode] = useState('single');
+  const [rangeStart, setRangeStart] = useState('');
+  const [rangeEnd, setRangeEnd] = useState('');
+  const classrooms = classroomList;
+  const [timetables, setTimetables] = useState<TimetablesType>({});
+  const [fetchingTimetable, setFetchingTimetable] = useState(false);
+  const [timetableError, setTimetableError] = useState('');
 
   useEffect(() => {
     if (facultyId) {
@@ -70,49 +84,17 @@ const FacultyDashboard = () => {
   }, [facultyId]);
 
   useEffect(() => {
-    // Fetch classrooms
-    axiosInstance.get('/classrooms')
-      .then(res => setClassrooms(res.data))
-      .catch(() => setClassrooms([]));
-  }, []);
-
-  useEffect(() => {
-    if (selectedDate && selectedYear) {
-      axiosInstance.get(`/bookings?date=${selectedDate}&year=${selectedYear}`)
-        .then(res => setBookings(res.data))
-        .catch(() => setBookings([]));
+    if (selectedDate && selectedClassroom) {
+      fetch(`/full-timetable/classroom?date=${selectedDate}&classroom=${encodeURIComponent(selectedClassroom)}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('jwt_token')}` }
+      })
+        .then(res => res.json())
+        .then(data => setClassroomSlots(data.slots || {}))
+        .catch(() => setClassroomSlots({}));
+    } else {
+      setClassroomSlots({});
     }
-  }, [selectedDate, selectedYear]);
-
-  useEffect(() => {
-    if (selectedDate && selectedSlot) {
-      axiosInstance.get(`/classrooms/available?date=${selectedDate}&slot=${selectedSlot}`)
-        .then(res => setAvailableClassrooms(res.data))
-        .catch(() => setAvailableClassrooms([]));
-    }
-  }, [selectedDate, selectedSlot]);
-
-  useEffect(() => {
-    if (selectedDate) {
-      axiosInstance.get(`/timetable?date=${selectedDate}`)
-        .then(res => setTimetableData(res.data))
-        .catch(() => setTimetableData({ timetable: [], bookings: [] }));
-    }
-  }, [selectedDate]);
-
-  useEffect(() => {
-    if (selectedYear && selectedSection) {
-      axiosInstance.get(`/timetable/by-year?year=${selectedYear}&section=${selectedSection}`)
-        .then(res => {
-          setDynamicTimetable(res.data.timetable || {});
-          setDynamicSlots(res.data.slots || []);
-        })
-        .catch(() => {
-          setDynamicTimetable({});
-          setDynamicSlots([]);
-        });
-    }
-  }, [selectedYear, selectedSection]);
+  }, [selectedDate, selectedClassroom]);
 
   const fetchEvents = async () => {
     try {
@@ -277,21 +259,53 @@ const FacultyDashboard = () => {
     }
   };
 
-  const handleBookingRequest = async () => {
-    if (!selectedClassroom || !selectedDate || !selectedSlot || !selectedYear) return;
+  const handleBookingRequest = async (slot) => {
+    if (!selectedClassroom || !selectedDate || !slot) return;
     try {
       await axiosInstance.post('/bookings/request', {
-        classroomId: selectedClassroom,
+        classroom: selectedClassroom,
         date: selectedDate,
-        slot: selectedSlot,
-        year: selectedYear
+        slot,
+        year: null // or remove if not needed
       });
       toast({ title: 'Booking requested', description: 'Your booking request has been submitted.' });
-      // Refresh bookings
-      axiosInstance.get(`/bookings?date=${selectedDate}&year=${selectedYear}`)
-        .then(res => setBookings(res.data));
+      // Optionally refresh bookings or classroomSlots
+      axiosInstance.get(`/full-timetable/classroom?date=${selectedDate}&classroom=${encodeURIComponent(selectedClassroom)}`)
+        .then(res => setClassroomSlots(res.data.slots || {}));
     } catch {
       toast({ title: 'Error', description: 'Failed to request booking.' });
+    }
+  };
+
+  const handleFetchTimetable = async () => {
+    setFetchingTimetable(true);
+    setTimetableError('');
+    setTimetables({});
+    try {
+      const date = dateMode === 'single' ? selectedDate : rangeStart; // Only single date supported for this UI
+      if (!date) {
+        setTimetableError('Please select a date.');
+        setFetchingTimetable(false);
+        return;
+      }
+      const results = await Promise.all(
+        classroomList.map(async (room) => {
+          const url = `/api/classroom-timetable?classroom=${encodeURIComponent(room)}&date=${date}`;
+          const res = await axiosInstance.get(url, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('jwt_token')}` }
+          });
+          return { room, timetable: res.data.timetable[date] };
+        })
+      );
+      const newTimetables = {};
+      results.forEach(({ room, timetable }) => {
+        newTimetables[room] = timetable;
+      });
+      setTimetables(newTimetables);
+    } catch (err) {
+      setTimetableError('Failed to fetch timetable.');
+    } finally {
+      setFetchingTimetable(false);
     }
   };
 
@@ -693,82 +707,96 @@ const FacultyDashboard = () => {
                 <CardContent className="space-y-6">
                   <div className="flex flex-col md:flex-row gap-4 items-end">
                     <div>
-                      <Label>Date</Label>
-                      <Input type="date" value={selectedDate} onChange={e => setSelectedDate(e.target.value)} />
+                      <Label>Date Mode</Label>
+                      <Select value={dateMode} onValueChange={setDateMode}>
+                        <SelectTrigger><SelectValue placeholder="Select mode" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="single">Single Date</SelectItem>
+                          <SelectItem value="range">Date Range</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                    <div className="flex gap-4 mb-4">
+                    {dateMode === 'single' ? (
                       <div>
-                        <Label>Year</Label>
-                        <Select value={String(selectedYear)} onValueChange={val => setSelectedYear(Number(val))}>
-                          <SelectTrigger><SelectValue placeholder="Select year" /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="1">1st Year</SelectItem>
-                            <SelectItem value="2">2nd Year</SelectItem>
-                            <SelectItem value="3">3rd Year</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Label>Date</Label>
+                        <Input type="date" value={selectedDate} onChange={e => setSelectedDate(e.target.value)} />
                       </div>
-                      <div>
-                        <Label>Section</Label>
-                        <Select value={selectedSection} onValueChange={val => setSelectedSection(val)}>
-                          <SelectTrigger><SelectValue placeholder="Select section" /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="A">A</SelectItem>
-                            <SelectItem value="B">B</SelectItem>
-                            <SelectItem value="C">C</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
+                    ) : (
+                      <>
+                        <div>
+                          <Label>Start Date</Label>
+                          <Input type="date" value={rangeStart} onChange={e => setRangeStart(e.target.value)} />
+                        </div>
+                        <div>
+                          <Label>End Date</Label>
+                          <Input type="date" value={rangeEnd} onChange={e => setRangeEnd(e.target.value)} />
+                        </div>
+                      </>
+                    )}
                     <div>
                       <Label>Classroom</Label>
                       <Select value={selectedClassroom} onValueChange={val => setSelectedClassroom(val)}>
                         <SelectTrigger><SelectValue placeholder="Select classroom" /></SelectTrigger>
                         <SelectContent>
-                          {availableClassrooms.map(room => (
-                            <SelectItem key={room._id} value={room._id}>{room.name}</SelectItem>
+                          {classrooms.map(roomName => (
+                            <SelectItem key={roomName} value={roomName}>{roomName}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
-                    <div>
-                      <Label>Slot</Label>
-                      <Select value={selectedSlot} onValueChange={val => setSelectedSlot(val)}>
-                        <SelectTrigger><SelectValue placeholder="Select slot" /></SelectTrigger>
-                        <SelectContent>
-                          {slots.map(slot => (
-                            <SelectItem key={slot} value={slot}>{slot}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <Button onClick={handleBookingRequest}>Request Booking</Button>
                   </div>
                   <div className="bg-gray-100 rounded-lg p-6 mt-6">
-                    <h3 className="text-lg font-medium text-gray-700 mb-4">Timetable for Year {selectedYear} Section {selectedSection}</h3>
+                    <Button
+                      onClick={handleFetchTimetable}
+                      disabled={fetchingTimetable || !selectedDate}
+                      className="mb-4"
+                    >
+                      {fetchingTimetable ? 'Fetching...' : 'Fetch Timetable'}
+                    </Button>
                     <div className="overflow-x-auto">
-                      <table className="min-w-full text-sm">
-                        <thead>
-                          <tr>
-                            <th className="px-2 py-1">Day</th>
-                            {dynamicSlots.map(slot => (
-                              <th key={slot} className="px-2 py-1">{slot}</th>
-                            ))}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {Object.keys(dynamicTimetable).map(day => (
-                            <tr key={day}>
-                              <td className="font-medium px-2 py-1">{day}</td>
-                              {dynamicSlots.map(slot => (
-                                <td key={slot} className="px-2 py-1">
-                                  {dynamicTimetable[day][slot] || ''}
-                                </td>
-                              ))}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                      {selectedClassroom && timetables[selectedClassroom] && (
+                        <div className="bg-white rounded shadow p-4 min-w-[320px]">
+                          <h3 className="text-lg font-semibold mb-2 text-center">{selectedClassroom}</h3>
+                          {timetableError && <div className="text-red-500 mb-2">{timetableError}</div>}
+                          <table className="min-w-full text-sm border">
+                            <thead>
+                              <tr className="bg-gray-50">
+                                <th className="px-2 py-1 border">Time Slot</th>
+                                <th className="px-2 py-1 border">Status</th>
+                                <th className="px-2 py-1 border">Year</th>
+                                <th className="px-2 py-1 border">Booking</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {Object.entries(timetables[selectedClassroom] || {}).map(([slot, infoRaw]) => {
+                                const info = infoRaw as SlotInfo;
+                                return (
+                                  <tr key={slot}>
+                                    <td className="px-2 py-1 border">{slot}</td>
+                                    <td className="px-2 py-1 border">
+                                      {info.status === 'Available' ? (
+                                        <span className="text-green-700">Available</span>
+                                      ) : info.status === 'Lunch Break' ? (
+                                        <span className="text-yellow-700">Lunch Break</span>
+                                      ) : (
+                                        <span className="text-blue-700">{info.subject}</span>
+                                      )}
+                                    </td>
+                                    <td className="px-2 py-1 border">{info.year ? `${info.year} year` : '-'}</td>
+                                    <td className="px-2 py-1 border">
+                                      {info.status === 'Available' && (
+                                        <Button size="sm" variant="outline" onClick={() => handleBookingRequest(slot)}>
+                                          Book
+                                        </Button>
+                                      )}
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="mt-8">
@@ -787,7 +815,7 @@ const FacultyDashboard = () => {
                         <tbody>
                           {myBookings.length > 0 ? myBookings.map(b => (
                             <tr key={b._id}>
-                              <td className="px-2 py-1">{b.classroom?.name}</td>
+                              <td className="px-2 py-1">{b.classroom}</td>
                               <td className="px-2 py-1">{b.date}</td>
                               <td className="px-2 py-1">{b.slot}</td>
                               <td className="px-2 py-1">{b.year}</td>
