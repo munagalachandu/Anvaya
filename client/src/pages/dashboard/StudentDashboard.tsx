@@ -5,7 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Calendar, Award, MapPin, CalendarDays, Clock, CheckCircle, Link, ExternalLink, Upload } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar, Award, MapPin, CalendarDays, Clock, CheckCircle, Link, ExternalLink, Upload, GraduationCap } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useToast } from '@/hooks/use-toast';
@@ -31,6 +32,7 @@ const StudentDashboard = () => {
   const [eventDate, setEventDate] = useState('');
   const [venue, setVenue] = useState('');
   const [placement, setPlacement] = useState('');
+  const [semester, setSemester] = useState('');
   const [certificateFile, setCertificateFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const studentId = localStorage.getItem("studentId");
@@ -41,6 +43,18 @@ const StudentDashboard = () => {
   const [registering, setRegistering] = useState(false);
   const [registrationStatus, setRegistrationStatus] = useState({});
   const [showEventModal, setShowEventModal] = useState(false);
+
+  // Semester options for dropdown
+  const semesterOptions = [
+    { value: '1', label: 'Semester 1' },
+    { value: '2', label: 'Semester 2' },
+    { value: '3', label: 'Semester 3' },
+    { value: '4', label: 'Semester 4' },
+    { value: '5', label: 'Semester 5' },
+    { value: '6', label: 'Semester 6' },
+    { value: '7', label: 'Semester 7' },
+    { value: '8', label: 'Semester 8' }
+  ];
 
   useEffect(() => {
     if (studentId) {
@@ -110,10 +124,10 @@ const StudentDashboard = () => {
   };
 
   const handleUploadAchievement = async () => {
-    if (!eventName || !eventDate || !venue ) {
+    if (!eventName || !eventDate || !venue || !semester) {
       toast({
         title: "Error",
-        description: "Please fill in all required fields and upload a certificate file.",
+        description: "Please fill in all required fields including semester.",
       });
       return;
     }
@@ -121,48 +135,54 @@ const StudentDashboard = () => {
     setIsUploading(true);
 
     // Create form data to send file
-const formData = new FormData();
-formData.append('event_name', eventName);
-formData.append('event_date', eventDate);
-formData.append('venue', venue);
-formData.append('placement', placement);
+    const formData = new FormData();
+    formData.append('event_name', eventName);
+    formData.append('event_date', eventDate);
+    formData.append('venue', venue);
+    formData.append('placement', placement);
+    formData.append('semester', semester);
 
-// Append certificate file or an empty string if no file is uploaded
-formData.append('certificate', certificateFile || ''); // Use an empty string if certificateFile is null
-
-try {
-  const response = await axios.post(
-    `http://localhost:5001/api/student_add_achievement`, 
-    formData, 
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-        'Content-Type': 'multipart/form-data'
-      }
+    // Append certificate file or an empty string if no file is uploaded
+    if (certificateFile) {
+      formData.append('certificate', certificateFile);
     }
-  );
 
-  if (response.status === 201) {
-    toast({
-      title: "Achievement uploaded",
-      description: "Your achievement has been uploaded successfully and is pending verification.",
-    });
+    try {
+      const response = await axios.post(
+        `http://localhost:5001/api/student_add_achievement`, 
+        formData, 
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
 
-    // Reset form fields
-    setEventName('');
-    setEventDate('');
-    setVenue('');
-    setPlacement('');
-    setCertificateFile(null);
-  }
-} catch (error) {
-  console.error("Failed to upload achievement:", error);
-  toast({
-    title: "Error",
-    description: error.response?.data?.error || "Failed to upload achievement. Please try again.",
-  });
-}
-     finally {
+      if (response.status === 201) {
+        toast({
+          title: "Achievement uploaded",
+          description: "Your achievement has been uploaded successfully and is pending verification.",
+        });
+
+        // Reset form fields
+        setEventName('');
+        setEventDate('');
+        setVenue('');
+        setPlacement('');
+        setSemester('');
+        setCertificateFile(null);
+        
+        // Refresh achievements list
+        fetchAchievements(studentId);
+      }
+    } catch (error) {
+      console.error("Failed to upload achievement:", error);
+      toast({
+        title: "Error",
+        description: error.response?.data?.error || "Failed to upload achievement. Please try again.",
+      });
+    } finally {
       setIsUploading(false);
     }
   };
@@ -196,6 +216,15 @@ try {
     } finally {
       setRegistering(false);
     }
+  };
+
+  const clearForm = () => {
+    setEventName('');
+    setEventDate('');
+    setVenue('');
+    setPlacement('');
+    setSemester('');
+    setCertificateFile(null);
   };
 
   return (
@@ -314,7 +343,7 @@ try {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="event-name">Event Name</Label>
+                      <Label htmlFor="event-name">Event Name *</Label>
                       <Input 
                         id="event-name" 
                         placeholder="Enter event name" 
@@ -324,7 +353,7 @@ try {
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="event-date">Event Date</Label>
+                      <Label htmlFor="event-date">Event Date *</Label>
                       <Input 
                         id="event-date" 
                         type="date" 
@@ -336,7 +365,7 @@ try {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="event-venue">Venue</Label>
+                      <Label htmlFor="event-venue">Venue *</Label>
                       <Input 
                         id="event-venue" 
                         placeholder="Enter venue" 
@@ -355,47 +384,56 @@ try {
                       />
                     </div>
                   </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="certificate-file">Certificate File</Label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="col-span-2">
-                        <Input 
-                          id="certificate-file" 
-                          type="file"
-                          accept=".pdf,.jpg,.jpeg,.png"
-                          onChange={handleFileChange}
-                          className="cursor-pointer"
-                        />
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {certificateFile ? (
-                          <span className="text-green-600 flex items-center">
-                            <CheckCircle size={16} className="mr-1" /> {certificateFile.name.length > 25 ? 
-                              certificateFile.name.substring(0, 25) + '...' : 
-                              certificateFile.name}
-                          </span>
-                        ) : (
-                          <span className="flex items-center">
-                            <Upload size={16} className="mr-1" /> Support PDF, JPG, PNG
-                          </span>
-                        )}
-                      </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="semester">Semester *</Label>
+                      <Select value={semester} onValueChange={setSemester}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select semester" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {semesterOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="certificate-file">Certificate File</Label>
+                      <Input 
+                        id="certificate-file" 
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={handleFileChange}
+                        className="cursor-pointer"
+                      />
+                    </div>
+                  </div>
+
+                  {certificateFile && (
+                    <div className="text-sm text-green-600 flex items-center mt-2">
+                      <CheckCircle size={16} className="mr-2" />
+                      File selected: {certificateFile.name.length > 30 ? 
+                        certificateFile.name.substring(0, 30) + '...' : 
+                        certificateFile.name}
+                    </div>
+                  )}
+                  
+                  <div className="text-sm text-gray-500 flex items-center">
+                    <Upload size={16} className="mr-1" /> 
+                    Supported formats: PDF, JPG, JPEG, PNG (Max 5MB)
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
                   <Button 
                     variant="outline" 
-                    onClick={() => {
-                      setEventName('');
-                      setEventDate('');
-                      setVenue('');
-                      setPlacement('');
-                      setCertificateFile(null);
-                    }}
+                    onClick={clearForm}
                   >
-                    Cancel
+                    Clear Form
                   </Button>
                   <Button 
                     onClick={handleUploadAchievement}
@@ -434,23 +472,36 @@ try {
                         >
                           <div className="col-span-3">
                             <div className="font-medium">{achievement.event_name}</div>
-                            <div className="text-sm text-gray-500">{new Date (achievement.date).toLocaleDateString()}</div>
+                            <div className="text-sm text-gray-500">
+                              {achievement.date ? new Date(achievement.date).toLocaleDateString() : 'Date not specified'}
+                            </div>
                             <div className="text-sm text-gray-500">{achievement.venue}</div>
                           </div>
-                          <div className="col-span-3">
+                          <div className="col-span-2">
                             <Badge variant="outline" className="flex items-center gap-1">
                               <Award size={14} /> 
                               {achievement.placement || 'Participation'}
                             </Badge>
                           </div>
-                          <div className="col-span-3">
+                          <div className="col-span-2">
+                            <Badge variant="secondary" className="flex items-center gap-1">
+                              <GraduationCap size={14} />
+                              Sem {achievement.semester || 'N/A'}
+                            </Badge>
+                          </div>
+                          <div className="col-span-2">
                             <Badge 
-                              variant={achievement.verification === 'Verified' ? 'secondary' : 'outline'} 
+                              variant={achievement.verification === 'Verified' ? 'secondary' : 
+                                      achievement.verification === 'Rejected' ? 'destructive' : 'outline'} 
                               className="flex items-center gap-1"
                             >
                               {achievement.verification === 'Verified' ? (
                                 <>
                                   <CheckCircle size={14} /> Verified
+                                </>
+                              ) : achievement.verification === 'Rejected' ? (
+                                <>
+                                  <Clock size={14} /> Rejected
                                 </>
                               ) : (
                                 <>
