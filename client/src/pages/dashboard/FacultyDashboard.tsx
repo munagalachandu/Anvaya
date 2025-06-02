@@ -1035,48 +1035,37 @@ const FacultyDashboard = () => {
                               {Object.entries(
                                 timetables[selectedClassroom] || {}
                               ).map(([slot, infoRaw]) => {
+                                // infoRaw is always a single object now
                                 const info = infoRaw as SlotInfo;
                                 return (
                                   <tr key={slot}>
                                     <td className="px-2 py-1 border">{slot}</td>
                                     <td className="px-2 py-1 border">
                                       {info.status === "Available" ? (
-                                        <span className="text-green-700">
-                                          Available
-                                        </span>
+                                        <span className="text-green-700">Available</span>
                                       ) : info.status === "Lunch Break" ? (
-                                        <span className="text-yellow-700">
-                                          Lunch Break
-                                        </span>
-                                      ) : info.status === "Booked" ? (
-                                        <span className="text-red-700">
-                                          Booked
-                                        </span>
+                                        <span className="text-yellow-700">Lunch Break</span>
+                                      ) : info.status === "Occupied" ? (
+                                        <span className="text-red-700">Occupied: {info.subject}</span>
                                       ) : (
-                                        <span className="text-blue-700">
-                                          {info.subject}
-                                        </span>
+                                        <span className="text-blue-700">{info.subject}</span>
                                       )}
                                     </td>
                                     <td className="px-2 py-1 border">
-                                      {info.status === "Available" || info.status === "Lunch Break" ? '-' : (info.year ? `${info.year} year` : '-')}
+                                      {info.status === "Available" || info.status === "Lunch Break" ? '-' : (info.year ? `${info.year} year` : "-")}
                                     </td>
                                     <td className="px-2 py-1 border">
                                       {info.status === "Available" ? (
                                         <Button
                                           size="sm"
                                           variant="outline"
-                                          onClick={() =>
-                                            handleBookingRequest(slot)
-                                          }
+                                          onClick={() => handleBookingRequest(slot)}
                                         >
                                           Book
                                         </Button>
-                                      ) : info.status === "Booked" ? (
-                                        <span className="text-red-500 font-semibold">
-                                          Booked
-                                        </span>
-                                      ) : null}
+                                      ) : (
+                                        <span className="text-red-500 font-semibold">Booked</span>
+                                      )}
                                     </td>
                                   </tr>
                                 );
