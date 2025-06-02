@@ -76,6 +76,7 @@ router.get('/student_achievements', verifyToken, async (req, res) => {
       date: a.date,
       venue: a.venue,
       verification: a.verification,
+      semester: a.semester, // Added semester field
     }));
 
     res.json(formatted);
@@ -87,11 +88,17 @@ router.get('/student_achievements', verifyToken, async (req, res) => {
 // POST new achievement for authenticated student
 router.post('/student_add_achievement', verifyToken, upload.single('certificate'), async (req, res) => {
   try {
-    const { event_name, event_date, venue, placement } = req.body;
+    const { event_name, event_date, venue, placement, semester } = req.body;
     const studentId = req.user.user_id;
 
-    if (!event_name || !event_date || !venue) {
-      return res.status(400).json({ error: 'Please provide event_name, event_date, and venue' });
+    if (!event_name || !event_date || !venue || !semester) {
+      return res.status(400).json({ error: 'Please provide event_name, event_date, venue, and semester' });
+    }
+
+    // Validate semester range (1 to 8)
+    const semesterNumber = parseInt(semester);
+    if (isNaN(semesterNumber) || semesterNumber < 1 || semesterNumber > 8) {
+      return res.status(400).json({ error: 'Semester must be a number between 1 and 8' });
     }
 
     let certificateUrl = '';
@@ -107,6 +114,7 @@ router.post('/student_add_achievement', verifyToken, upload.single('certificate'
       date: event_date,
       venue,
       verification: 'Pending',
+      semester: semesterNumber
     });
 
     await achievement.save();
@@ -122,6 +130,7 @@ router.post('/student_add_achievement', verifyToken, upload.single('certificate'
         date: achievement.date,
         venue: achievement.venue,
         verification: achievement.verification,
+        semester: achievement.semester,
         user_id: achievement.user,
       },
     });
@@ -129,8 +138,6 @@ router.post('/student_add_achievement', verifyToken, upload.single('certificate'
     res.status(500).json({ error: 'Failed to add achievement' });
   }
 });
-
-
 
 // Verify participation (admin/faculty)
 router.post('/verify_participation/:achievementId', verifyToken, async (req, res) => {
@@ -190,7 +197,8 @@ router.get('/student_events_verify/:adminId', verifyToken, async (req, res) => {
       }) : 'N/A',
       placement: achievement.placement || 'Participation',
       verification: achievement.verification || 'Pending',
-      certificate: achievement.achievement_certificate
+      certificate: achievement.achievement_certificate,
+      semester: achievement.semester // Added semester field for admin view
     }));
 
     res.json(formattedAchievements);
@@ -214,7 +222,8 @@ router.get('/student_events_verify', verifyToken, async (req, res) => {
       title: achievement.achievement_name,
       placement: achievement.placement || 'Participation',
       verification: achievement.verification || 'Pending',
-      certificate: achievement.achievement_certificate
+      certificate: achievement.achievement_certificate,
+      semester: achievement.semester // Added semester field
     }));
 
     res.json(formattedAchievements);
