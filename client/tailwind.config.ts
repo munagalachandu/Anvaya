@@ -1,5 +1,5 @@
-
 import type { Config } from "tailwindcss";
+import animate from "tailwindcss-animate";
 
 export default {
 	darkMode: ["class"],
@@ -75,14 +75,14 @@ export default {
 					accent: '#FDE1D3'
 				},
 				sports: {
-					DEFAULT: '#F97316',
-					foreground: '#0EA5E9',
-					accent: '#8B5CF6'
+					DEFAULT: '#6E59A5',
+					foreground: '#FFDEE2',
+					accent: '#FDE1D3'
 				},
 				workshops: {
-					DEFAULT: '#8E9196',
-					foreground: '#F1F0FB',
-					accent: '#D3E4FD'
+					DEFAULT: '#6E59A5',
+					foreground: '#FFDEE2',
+					accent: '#FDE1D3'
 				}
 			},
 			borderRadius: {
@@ -130,5 +130,5 @@ export default {
 			}
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [animate],
 } satisfies Config;

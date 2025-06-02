@@ -13,6 +13,7 @@ interface EventCardProps {
   registrationUrl?: string;
   brochureUrl?: string;
   isPast?: boolean;
+  onClick?: () => void;
 }
 
 const EventCard: React.FC<EventCardProps> = ({
@@ -24,7 +25,8 @@ const EventCard: React.FC<EventCardProps> = ({
   category,
   registrationUrl,
   brochureUrl,
-  isPast = false
+  isPast = false,
+  onClick
 }) => {
   // Using the same white card background for all cards
   const cardClass = "bg-white overflow-hidden rounded shadow-md";
@@ -41,7 +43,7 @@ const EventCard: React.FC<EventCardProps> = ({
   const buttonClass = "bg-purple-600 hover:bg-purple-700 text-white";
 
   return (
-    <div className={`event-card ${cardClass}`}>
+    <div className={`event-card ${cardClass}`} onClick={onClick}>
       <div className="h-40 overflow-hidden">
         <img
           src={image}

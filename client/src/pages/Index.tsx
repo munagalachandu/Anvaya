@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -8,6 +7,12 @@ import EventCard from '../components/EventCard';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Demo data
 const upcomingEvents = [
@@ -149,23 +154,10 @@ const Index = () => {
   {/* Content with 3D effect */}
   <div className="container mx-auto px-6 relative z-10">
     <div className="max-w-3xl mx-auto text-center">
-      <h1 className="text-4xl md:text-6xl font-bold mb-6 text-purple-900 drop-shadow-md"
-          style={{
-            transition: 'transform 0.5s',
-            transformOrigin: 'center',
-            '&:hover': {
-              transform: 'scale(1.05)'
-            }
-          }}>
+      <h1 className="text-4xl md:text-6xl font-bold mb-6 text-purple-900 drop-shadow-md transition-transform duration-500 hover:scale-105">
         Welcome to Anvaya
       </h1>
-      <p className="text-lg md:text-xl mb-8 text-purple-800 drop-shadow"
-         style={{
-           transition: 'all 0.5s',
-           '&:hover': {
-             transform: 'translateY(4px)'
-           }
-         }}>
+      <p className="text-lg md:text-xl mb-8 text-purple-800 drop-shadow transition-all duration-500 hover:translate-y-1">
         Connecting students, faculty, and the community through enriching events 
         and experiences. Anvaya serves as a platform to showcase talent, foster 
         learning, and build lasting connections.
@@ -173,25 +165,31 @@ const Index = () => {
       <div className="flex flex-wrap justify-center gap-4">
         <Button 
           variant="outline" 
-          className="text-purple-700 border-purple-400 hover:bg-purple-50 font-medium px-6 py-3 rounded-md shadow transition-all duration-300 hover:shadow-lg"
-          style={{
-            transition: 'all 0.3s',
-            '&:hover': {
-              transform: 'translateY(-4px)'
-            }
-          }}>
+          className="text-purple-700 border-purple-400 hover:bg-purple-50 font-medium px-6 py-3 rounded-md shadow transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
           Learn More
         </Button>
-        <Button 
-          className="bg-purple-600 text-white hover:bg-purple-700 font-medium px-6 py-3 rounded-md shadow-md transition-all duration-300 hover:shadow-lg"
-          style={{
-            transition: 'all 0.3s',
-            '&:hover': {
-              transform: 'translateY(-4px)'
-            }
-          }}>
-          Browse Events
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              className="bg-purple-600 text-white hover:bg-purple-700 font-medium px-6 py-3 rounded-md shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+              Browse Events
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuItem asChild>
+              <Link to="/events/cultural" className="cursor-pointer">Cultural Events</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/events/technical" className="cursor-pointer">Technical Events</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/events/sports" className="cursor-pointer">Sports Events</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/events/workshops" className="cursor-pointer">Workshops</Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   </div>

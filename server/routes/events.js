@@ -3,8 +3,25 @@ import Event from '../models/Event.js';
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import EventRegistration from '../models/EventRegistration.js';
+import multer from 'multer';
+import cloudinary from '../config/cloudinary.js';
 
 const router = express.Router();
+
+// Configure multer for memory storage
+const upload = multer({ 
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Not an image! Please upload an image.'), false);
+    }
+  }
+});
 
 // Middleware placeholder for JWT auth
 const verifyToken = (req, res, next) => {
@@ -29,7 +46,8 @@ router.get('/fac_events', verifyToken, async (req, res) => {
       date: e.start_date,
       venue: e.venue,
       status: e.status,
-      participants: e.number_of_participants || 0
+      participants: e.number_of_participants || 0,
+      image: e.image
     })));
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch events' });
@@ -37,12 +55,31 @@ router.get('/fac_events', verifyToken, async (req, res) => {
 });
 
 // Add event as faculty (user from JWT)
-router.post('/fac_add_events', verifyToken, async (req, res) => {
+router.post('/fac_add_events', verifyToken, upload.single('image'), async (req, res) => {
   const { title, category, start_date, end_date, venue, description, guest_name, guest_contact, session_details } = req.body;
   if (!title || !category || !start_date || !end_date || !venue || !description) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
   try {
+    let imageUrl = '/placeholder.svg';
+    
+    if (req.file) {
+      // Upload to Cloudinary
+      const b64 = Buffer.from(req.file.buffer).toString('base64');
+      const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+      
+      const result = await cloudinary.uploader.upload(dataURI, {
+        folder: 'events',
+        resource_type: 'auto',
+        transformation: [
+          { width: 800, height: 600, crop: 'fill' },
+          { quality: 'auto' }
+        ]
+      });
+      
+      imageUrl = result.secure_url;
+    }
+
     const newEvent = new Event({
       event_name: title,
       user: req.user.user_id,
@@ -55,11 +92,14 @@ router.post('/fac_add_events', verifyToken, async (req, res) => {
       guest_contact,
       session_details,
       status: 'Upcoming',
-      number_of_participants: 0
+      number_of_participants: 0,
+      image: imageUrl
     });
+    
     await newEvent.save();
     res.status(201).json({ success: true, message: 'Event added successfully' });
   } catch (err) {
+    console.error('Error adding event:', err);
     res.status(500).json({ success: false, error: 'Failed to add event' });
   }
 });
@@ -124,6 +164,65 @@ router.post('/events/:eventId/register', verifyToken, async (req, res) => {
   const reg = new EventRegistration({ event: eventId, student: studentId });
   await reg.save();
   res.json({ success: true });
+});
+
+// Edit event
+router.put('/events/:eventId', verifyToken, upload.single('image'), async (req, res) => {
+  const eventId = req.params.eventId;
+  const { title, category, start_date, end_date, venue, description, guest_name, guest_contact, session_details } = req.body;
+  
+  try {
+    const event = await Event.findOne({ _id: eventId, user: req.user.user_id });
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found or unauthorized' });
+    }
+
+    const updateData = {
+      event_name: title,
+      category,
+      start_date,
+      end_date,
+      venue,
+      description,
+      guest_name,
+      guest_contact,
+      session_details
+    };
+
+    if (req.file) {
+      // Upload new image to Cloudinary
+      const b64 = Buffer.from(req.file.buffer).toString('base64');
+      const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+      
+      const result = await cloudinary.uploader.upload(dataURI, {
+        folder: 'events',
+        resource_type: 'auto',
+        transformation: [
+          { width: 800, height: 600, crop: 'fill' },
+          { quality: 'auto' }
+        ]
+      });
+      
+      updateData.image = result.secure_url;
+
+      // Delete old image from Cloudinary if it exists
+      if (event.image && event.image.includes('cloudinary')) {
+        const publicId = event.image.split('/').slice(-1)[0].split('.')[0];
+        await cloudinary.uploader.destroy(publicId);
+      }
+    }
+
+    const updatedEvent = await Event.findByIdAndUpdate(
+      eventId,
+      updateData,
+      { new: true }
+    );
+
+    res.json({ success: true, event: updatedEvent });
+  } catch (err) {
+    console.error('Error updating event:', err);
+    res.status(500).json({ success: false, error: 'Failed to update event' });
+  }
 });
 
 export default router; 

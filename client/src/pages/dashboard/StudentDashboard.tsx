@@ -13,6 +13,12 @@ import axios from 'axios';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../lib/axiosInstance';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const StudentDashboard = () => {
   const { toast } = useToast();
@@ -175,7 +181,7 @@ try {
     });
     localStorage.removeItem('jwt_token');
     localStorage.removeItem('studentId');
-    navigate('/login');
+    navigate('/login?role=student');
   };
 
   const handleRegister = async (eventId) => {
@@ -207,9 +213,27 @@ try {
               <Button asChild variant="outline" className="mr-2">
                 <RouterLink to="/">Home</RouterLink>
               </Button>
-              <Button asChild variant="outline" className="mr-2">
-                <RouterLink to="/events/cultural">Events</RouterLink>
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="mr-2">
+                    Events
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem asChild>
+                    <RouterLink to="/events/cultural">Cultural Events</RouterLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <RouterLink to="/events/technical">Technical Events</RouterLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <RouterLink to="/events/sports">Sports Events</RouterLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <RouterLink to="/events/workshops">Workshops</RouterLink>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Button variant="destructive" onClick={handleLogout}>Log Out</Button>
             </div>
           </div>

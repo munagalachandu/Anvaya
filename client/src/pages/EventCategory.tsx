@@ -1,203 +1,11 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import EventCard from '../components/EventCard';
 import { Button } from '@/components/ui/button';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-
-// Demo data
-const mockEvents = {
-  cultural: {
-    upcoming: [
-      {
-        id: '1',
-        title: 'Annual Cultural Fest 2023',
-        date: 'May 15-17, 2023',
-        venue: 'Main Auditorium',
-        image: '/placeholder.svg',
-        category: 'cultural',
-        registrationUrl: '#',
-        brochureUrl: '#'
-      },
-      {
-        id: '2',
-        title: 'Classical Dance Competition',
-        date: 'June 5, 2023',
-        venue: 'Dance Studio',
-        image: '/placeholder.svg',
-        category: 'cultural',
-        registrationUrl: '#',
-        brochureUrl: '#'
-      }
-    ],
-    cityLevel: [
-      {
-        id: '3',
-        title: 'Inter-College Cultural Fest',
-        date: 'May 20-22, 2023',
-        venue: 'City Convention Center',
-        image: '/placeholder.svg',
-        category: 'cultural',
-        registrationUrl: '#',
-        brochureUrl: '#'
-      }
-    ],
-    past: [
-      {
-        id: '4',
-        title: 'Music Concert 2022',
-        date: 'December 10, 2022',
-        venue: 'Open Air Theater',
-        image: '/placeholder.svg',
-        category: 'cultural',
-        isPast: true
-      }
-    ]
-  },
-  sports: {
-    upcoming: [
-      {
-        id: '5',
-        title: 'Inter-College Sports Meet',
-        date: 'May 28-30, 2023',
-        venue: 'University Grounds',
-        image: '/placeholder.svg',
-        category: 'sports',
-        registrationUrl: '#',
-        brochureUrl: '#'
-      },
-      {
-        id: '6',
-        title: 'Basketball Tournament',
-        date: 'June 12-15, 2023',
-        venue: 'Indoor Stadium',
-        image: '/placeholder.svg',
-        category: 'sports',
-        registrationUrl: '#',
-        brochureUrl: '#'
-      }
-    ],
-    cityLevel: [
-      {
-        id: '7',
-        title: 'City Marathon',
-        date: 'June 25, 2023',
-        venue: 'City Central Park',
-        image: '/placeholder.svg',
-        category: 'sports',
-        registrationUrl: '#',
-        brochureUrl: '#'
-      }
-    ],
-    past: [
-      {
-        id: '8',
-        title: 'Cricket Championship 2022',
-        date: 'November 15-20, 2022',
-        venue: 'University Cricket Ground',
-        image: '/placeholder.svg',
-        category: 'sports',
-        isPast: true
-      }
-    ]
-  },
-  technical: {
-    upcoming: [
-      {
-        id: '9',
-        title: 'Tech Hackathon 2023',
-        date: 'June 5-7, 2023',
-        venue: 'CS Department',
-        image: '/placeholder.svg',
-        category: 'technical',
-        registrationUrl: '#',
-        brochureUrl: '#'
-      },
-      {
-        id: '10',
-        title: 'AI Conference',
-        date: 'June 18, 2023',
-        venue: 'Conference Hall',
-        image: '/placeholder.svg',
-        category: 'technical',
-        registrationUrl: '#',
-        brochureUrl: '#'
-      }
-    ],
-    cityLevel: [
-      {
-        id: '11',
-        title: 'City Tech Summit',
-        date: 'July 10-12, 2023',
-        venue: 'Tech Park',
-        image: '/placeholder.svg',
-        category: 'technical',
-        registrationUrl: '#',
-        brochureUrl: '#'
-      }
-    ],
-    past: [
-      {
-        id: '12',
-        title: 'Technical Symposium',
-        date: 'April 2-4, 2023',
-        venue: 'CS Department',
-        image: '/placeholder.svg',
-        category: 'technical',
-        isPast: true
-      }
-    ]
-  },
-  workshops: {
-    upcoming: [
-      {
-        id: '13',
-        title: 'Data Science Workshop',
-        date: 'June 15, 2023',
-        venue: 'Lab 101',
-        image: '/placeholder.svg',
-        category: 'workshops',
-        registrationUrl: '#',
-        brochureUrl: '#'
-      },
-      {
-        id: '14',
-        title: 'Design Thinking Workshop',
-        date: 'June 25, 2023',
-        venue: 'Seminar Hall',
-        image: '/placeholder.svg',
-        category: 'workshops',
-        registrationUrl: '#',
-        brochureUrl: '#'
-      }
-    ],
-    cityLevel: [
-      {
-        id: '15',
-        title: 'Industry 4.0 Workshop',
-        date: 'July 5, 2023',
-        venue: 'Innovation Hub',
-        image: '/placeholder.svg',
-        category: 'workshops',
-        registrationUrl: '#',
-        brochureUrl: '#'
-      }
-    ],
-    past: [
-      {
-        id: '16',
-        title: 'Web Development Workshop',
-        date: 'April 10, 2023',
-        venue: 'Online',
-        image: '/placeholder.svg',
-        category: 'workshops',
-        isPast: true
-      }
-    ]
-  }
-};
+import axios from 'axios';
 
 const categoryTitles: Record<string, string> = {
   cultural: 'Cultural Events',
@@ -213,120 +21,178 @@ const categoryDescriptions: Record<string, string> = {
   workshops: 'Enhance your skills through hands-on training sessions conducted by experts in various domains.'
 };
 
+interface Event {
+  id: string;
+  title: string;
+  date: string;
+  venue: string;
+  image: string;
+  category: 'cultural' | 'sports' | 'technical' | 'workshops';
+  registrationUrl?: string;
+  brochureUrl?: string;
+  isPast?: boolean;
+}
+
 const EventCategory: React.FC = () => {
   const { category } = useParams<{ category: string }>();
+  const navigate = useNavigate();
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [events, setEvents] = useState<{
+    upcoming: Event[];
+    cityLevel: Event[];
+    past: Event[];
+  }>({
+    upcoming: [],
+    cityLevel: [],
+    past: []
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
-  if (!category || !mockEvents[category as keyof typeof mockEvents]) {
+  useEffect(() => {
+    // Get user role from localStorage
+    const userInfo = localStorage.getItem('user_info');
+    if (userInfo) {
+      try {
+        const user = JSON.parse(userInfo);
+        setUserRole(user.role);
+      } catch {
+        setUserRole(null);
+      }
+    }
+
+    // Fetch events for the category
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5001/api/events/category/${category}`);
+        const currentDate = new Date();
+        
+        // Sort events into upcoming, city level, and past
+        const sortedEvents = response.data.reduce((acc: any, event: any) => {
+          const eventDate = new Date(event.start_date);
+          const eventObj = {
+            id: event._id,
+            title: event.event_name,
+            date: new Date(event.start_date).toLocaleDateString(),
+            venue: event.venue,
+            image: event.image || '/placeholder.svg',
+            category: event.category.toLowerCase() as 'cultural' | 'sports' | 'technical' | 'workshops',
+            description: event.description
+          };
+
+          if (eventDate < currentDate) {
+            acc.past.push({ ...eventObj, isPast: true });
+          } else if (event.venue.toLowerCase().includes('city')) {
+            acc.cityLevel.push(eventObj);
+          } else {
+            acc.upcoming.push(eventObj);
+          }
+          return acc;
+        }, { upcoming: [], cityLevel: [], past: [] });
+
+        setEvents(sortedEvents);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching events:', err);
+        setError('Failed to load events. Please try again later.');
+        setLoading(false);
+      }
+    };
+
+    if (category) {
+      fetchEvents();
+    }
+  }, [category]);
+  
+  if (!category || !categoryTitles[category]) {
     return <div>Category not found</div>;
   }
   
-  const events = mockEvents[category as keyof typeof mockEvents];
   const title = categoryTitles[category];
   const description = categoryDescriptions[category];
 
-  // Define background styles based on category
-  const getBackgroundStyle = () => {
-    switch (category) {
-      case 'technical':
-        return 'bg-technical text-white';
-      case 'cultural':
-        return 'bg-gradient-to-r from-cultural to-cultural/80';
-      case 'sports':
-        return 'bg-gradient-to-r from-sports to-sports/80 text-white';
-      case 'workshops':
-        return 'bg-white border-t border-b border-workshops/20';
-      default:
-        return 'bg-gray-100';
-    }
+  const handleEventClick = (eventId: string) => {
+    navigate(`/events/${category}/${eventId}${userRole ? `?role=${userRole}` : ''}`);
   };
 
+  if (loading) {
+    return <div>Loading events...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Header />
       
       <main className="flex-grow">
-        {/* Hero Section */}
-        <section className={`py-16 ${getBackgroundStyle()}`}>
+        {/* Category Header */}
+        <div className="bg-purple-800 text-white py-16">
           <div className="container mx-auto px-4">
-            <Link to="/" className="inline-flex items-center text-sm mb-6 hover:opacity-80">
-              <ArrowLeft size={16} className="mr-1" />
-              <span>Back to Home</span>
+            <Link 
+              to={userRole ? `/?role=${userRole}` : '/'} 
+              className="inline-flex items-center text-white/80 hover:text-white mb-4"
+            >
+              <ArrowLeft size={16} className="mr-2" />
+              Back to Home
             </Link>
-            
             <h1 className="text-4xl font-bold mb-4">{title}</h1>
-            <p className="text-lg max-w-3xl mb-6">{description}</p>
+            <p className="text-lg text-white/80 max-w-2xl">{description}</p>
           </div>
-        </section>
+        </div>
         
-        {/* Upcoming Events */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-8">Upcoming {title}</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {events.upcoming.map((event) => (
-                <EventCard 
-                  key={event.id}
-                  id={event.id}
-                  title={event.title}
-                  date={event.date}
-                  venue={event.venue}
-                  image={event.image}
-                  category={event.category as 'cultural' | 'sports' | 'technical' | 'workshops'}
-                  registrationUrl={event.registrationUrl}
-                  brochureUrl={event.brochureUrl}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-        
-        {/* City Level Events */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-2">Bengaluru City Events</h2>
-            <p className="text-gray-600 mb-8">Explore events happening across Bengaluru city</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {events.cityLevel.map((event) => (
-                <EventCard 
-                  key={event.id}
-                  id={event.id}
-                  title={event.title}
-                  date={event.date}
-                  venue={event.venue}
-                  image={event.image}
-                  category={event.category as 'cultural' | 'sports' | 'technical' | 'workshops'}
-                  registrationUrl={event.registrationUrl}
-                  brochureUrl={event.brochureUrl}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-        
-        {/* Past Events */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-2">Past {title}</h2>
-            <p className="text-gray-600 mb-8">Look back at our previous events</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {events.past.map((event) => (
-                <EventCard 
-                  key={event.id}
-                  id={event.id}
-                  title={event.title}
-                  date={event.date}
-                  venue={event.venue}
-                  image={event.image}
-                  category={event.category as 'cultural' | 'sports' | 'technical' | 'workshops'}
-                  isPast={event.isPast}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Events Grid */}
+        <div className="container mx-auto px-4 py-12">
+          {/* Upcoming Events */}
+          {events.upcoming.length > 0 && (
+            <section className="mb-12">
+              <h2 className="text-2xl font-bold mb-6">Upcoming Events</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {events.upcoming.map((event) => (
+                  <EventCard
+                    key={event.id}
+                    {...event}
+                    onClick={() => handleEventClick(event.id)}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+          
+          {/* City Level Events */}
+          {events.cityLevel.length > 0 && (
+            <section className="mb-12">
+              <h2 className="text-2xl font-bold mb-6">City Level Events</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {events.cityLevel.map((event) => (
+                  <EventCard
+                    key={event.id}
+                    {...event}
+                    onClick={() => handleEventClick(event.id)}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+          
+          {/* Past Events */}
+          {events.past.length > 0 && (
+            <section>
+              <h2 className="text-2xl font-bold mb-6">Past Events</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {events.past.map((event) => (
+                  <EventCard
+                    key={event.id}
+                    {...event}
+                    onClick={() => handleEventClick(event.id)}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
       </main>
       
       <Footer />
