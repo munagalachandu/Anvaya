@@ -34,13 +34,16 @@ const seedUsers = async () => {
       const hashedPassword1 = await bcrypt.hash('password123', 10);
       const hashedPassword2 = await bcrypt.hash('password456', 10);
       const hashedPassword3 = await bcrypt.hash('password789', 10);
-      const hashedPassword4 = await bcrypt.hash('password101', 10);
+    
 
       const users = [
         { name: 'Admin User', email: 'admin@example.com', password: hashedPassword1, role: 'admin' },
         { name: 'Faculty User', email: 'faculty@example.com', password: hashedPassword2, role: 'faculty' },
         { name: 'Student One', email: 'student1@example.com', password: hashedPassword3, role: 'student' },
-        { name: 'Student Two', email: 'student2@example.com', password: hashedPassword4, role: 'student' },
+        { name: 'Student Two', email: 'student2@example.com', password: hashedPassword3, role: 'student' },
+         { name: 'Student Three', email: 'student3@example.com', password: hashedPassword3, role: 'student' },
+          { name: 'Student Four', email: 'student4@example.com', password: hashedPassword3, role: 'student' },
+        { name: 'Student Five', email: 'student5@example.com', password: hashedPassword3, role: 'student' }, 
       ];
 
       await User.insertMany(users); // Insert users into the database
