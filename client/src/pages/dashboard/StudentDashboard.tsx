@@ -83,7 +83,7 @@ const StudentDashboard = () => {
   const fetchAchievements = async (studentId) => {
     setLoadingAchievements(true);
     try {
-      const response = await axios.get(`http://localhost:5001/api/student_achievements/${studentId}`, {
+      const response = await axios.get(`http://localhost:5001/api/student_achievements`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
         }
@@ -126,7 +126,7 @@ formData.append('certificate', certificateFile || ''); // Use an empty string if
 
 try {
   const response = await axios.post(
-    `http://localhost:5001/api/student_add_achievement/${studentId}`, 
+    `http://localhost:5001/api/student_add_achievement`, 
     formData, 
     {
       headers: {
