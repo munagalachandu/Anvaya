@@ -16,13 +16,13 @@ const Footer = () => {
         {/* Top Section with Social Icons */}
         <div className="flex justify-center mb-6">
           <div className="flex space-x-6">
-            <a href="https://www.linkedin.com/company/aimldeptdsce" aria-label="LinkedIn" className="text-purple-200 hover:text-white transition-all duration-300">
+            <a href="https://www.linkedin.com/company/aimldeptdsce" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-purple-200 hover:text-white transition-all duration-300">
               <Linkedin size={22} />
             </a>
-            <a href="https://www.instagram.com/aimldeptdsce" aria-label="Instagram" className="text-purple-200 hover:text-white transition-all duration-300">
+            <a href="https://www.instagram.com/aimldeptdsce" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-purple-200 hover:text-white transition-all duration-300">
               <Instagram size={22} />
             </a>
-            <a href="https://www.youtube.com/@aimldeptdsce" aria-label="YouTube" className="text-purple-200 hover:text-white transition-all duration-300">
+            <a href="https://www.youtube.com/@aimldeptdsce" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-purple-200 hover:text-white transition-all duration-300">
               <Youtube size={22} />
             </a>
           </div>
@@ -47,21 +47,9 @@ const Footer = () => {
                 <span className="w-1 h-1 bg-purple-300 rounded-full mr-1"></span>
                 About Us
               </Link>
-              <Link to="/events/cultural" className="text-sm text-purple-100 hover:text-white transition-colors duration-300 flex items-center">
-                <span className="w-1 h-1 bg-purple-300 rounded-full mr-1"></span>
-                Events
-              </Link>
-              <Link to="/faculty" className="text-sm text-purple-100 hover:text-white transition-colors duration-300 flex items-center">
-                <span className="w-1 h-1 bg-purple-300 rounded-full mr-1"></span>
-                Faculty
-              </Link>
               <Link to="/research" className="text-sm text-purple-100 hover:text-white transition-colors duration-300 flex items-center">
                 <span className="w-1 h-1 bg-purple-300 rounded-full mr-1"></span>
                 Research
-              </Link>
-              <Link to="/login" className="text-sm text-purple-100 hover:text-white transition-colors duration-300 flex items-center">
-                <span className="w-1 h-1 bg-purple-300 rounded-full mr-1"></span>
-                Login
               </Link>
             </div>
           </div>
@@ -105,7 +93,7 @@ const Footer = () => {
                   Kumarswamy Layout,<br />
                   Bengaluru, Karnataka - 560078
                 </address>
-                <a href="https://goo.gl/maps" target="_blank" rel="noopener noreferrer" 
+                <a href="https://g.co/kgs/8iMfdtw" target="_blank" rel="noopener noreferrer" 
                    className="inline-flex items-center bg-white text-purple-800 hover:bg-purple-50 px-2 py-1 rounded-full text-xs font-medium mt-2 shadow transform hover:scale-105 transition-all duration-300">
                   <MapPin size={12} className="mr-1" />
                   View on Map

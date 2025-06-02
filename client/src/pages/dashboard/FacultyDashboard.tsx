@@ -8,13 +8,19 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { PlusCircle, Calendar, Users, MapPin, CalendarDays, BookOpen, User, Award, Check, X, ExternalLink } from 'lucide-react';
+import { PlusCircle, Calendar, Users, MapPin, CalendarDays, BookOpen, User, Award, Check, X, ExternalLink, Pencil } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useToast } from '@/hooks/use-toast';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import axiosInstance from '../../lib/axiosInstance';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const classroomList = ['Room 1', 'Room 2', 'Room 3', 'Room 4'];
 
@@ -66,6 +72,9 @@ const FacultyDashboard = () => {
   const [timetables, setTimetables] = useState<TimetablesType>({});
   const [fetchingTimetable, setFetchingTimetable] = useState(false);
   const [timetableError, setTimetableError] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [editingEvent, setEditingEvent] = useState(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   useEffect(() => {
     if (facultyId) {
@@ -148,22 +157,26 @@ const FacultyDashboard = () => {
       });
       return;
     }
-    const payload = {
-      title,
-      category: capitalizeCategory(category),
-      start_date: startDate,
-      end_date: endDate,
-      venue,
-      description,
-      guest_name: guestName,
-      guest_contact: guestContact,
-      session_details: sessionDetails,
-    };
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('category', capitalizeCategory(category));
+    formData.append('start_date', startDate);
+    formData.append('end_date', endDate);
+    formData.append('venue', venue);
+    formData.append('description', description);
+    formData.append('guest_name', guestName);
+    formData.append('guest_contact', guestContact);
+    formData.append('session_details', sessionDetails);
+    if (selectedImage) {
+      formData.append('image', selectedImage);
+    }
+
     try {
-      const response = await axios.post(`http://localhost:5001/api/fac_add_events`, payload, {
+      const response = await axios.post(`http://localhost:5001/api/fac_add_events`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'multipart/form-data'
         }
       });
       if (response.status === 201) {
@@ -172,35 +185,15 @@ const FacultyDashboard = () => {
           description: "Your event has been added successfully.",
         });
         setIsEventDialogOpen(false);
-        setTitle('');
-        setCategory('');
-        setStartDate('');
-        setEndDate('');
-        setVenue('');
-        setDescription('');
-        setGuestName('');
-        setGuestContact('');
-        setSessionDetails('');
+        resetForm();
         fetchEvents();
       }
     } catch (error) {
       console.error("Failed to add event:", error);
-      if (error.response) {
-        toast({
-          title: "Error",
-          description: error.response.data.error || "Failed to add event. Please try again.",
-        });
-      } else if (error.request) {
-        toast({
-          title: "Error",
-          description: "No response from server. Please check your connection.",
-        });
-      } else {
-        toast({
-          title: "Error",
-          description: "Request failed. Please try again.",
-        });
-      }
+      toast({
+        title: "Error",
+        description: error.response?.data?.error || "Failed to add event. Please try again.",
+      });
     }
   };
   
@@ -211,8 +204,7 @@ const FacultyDashboard = () => {
     });
     localStorage.removeItem('jwt_token');
     localStorage.removeItem('facultyId');
-    
-    navigate('/login');
+    navigate('/login?role=faculty');
   };
 
   const openCertificateDialog = (participation) => {
@@ -309,6 +301,76 @@ const FacultyDashboard = () => {
     }
   };
 
+  const handleEditEvent = async () => {
+    if (!editingEvent) return;
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('category', capitalizeCategory(category));
+    formData.append('start_date', startDate);
+    formData.append('end_date', endDate);
+    formData.append('venue', venue);
+    formData.append('description', description);
+    formData.append('guest_name', guestName);
+    formData.append('guest_contact', guestContact);
+    formData.append('session_details', sessionDetails);
+    if (selectedImage) {
+      formData.append('image', selectedImage);
+    }
+
+    try {
+      const response = await axios.put(`http://localhost:5001/api/events/${editingEvent.id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      if (response.status === 200) {
+        toast({
+          title: "Event updated",
+          description: "Your event has been updated successfully.",
+        });
+        setIsEditDialogOpen(false);
+        resetForm();
+        fetchEvents();
+      }
+    } catch (error) {
+      console.error("Failed to update event:", error);
+      toast({
+        title: "Error",
+        description: error.response?.data?.error || "Failed to update event. Please try again.",
+      });
+    }
+  };
+
+  const resetForm = () => {
+    setTitle('');
+    setCategory('');
+    setStartDate('');
+    setEndDate('');
+    setVenue('');
+    setDescription('');
+    setGuestName('');
+    setGuestContact('');
+    setSessionDetails('');
+    setSelectedImage(null);
+    setEditingEvent(null);
+  };
+
+  const handleEditClick = (event) => {
+    setEditingEvent(event);
+    setTitle(event.title);
+    setCategory(event.category.toLowerCase());
+    setStartDate(event.start_date.split('T')[0]);
+    setEndDate(event.end_date.split('T')[0]);
+    setVenue(event.venue);
+    setDescription(event.description);
+    setGuestName(event.guest_name || '');
+    setGuestContact(event.guest_contact || '');
+    setSessionDetails(event.session_details || '');
+    setIsEditDialogOpen(true);
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -324,9 +386,27 @@ const FacultyDashboard = () => {
               <Button asChild variant="outline" className="mr-2">
                 <RouterLink to="/">Home</RouterLink>
               </Button>
-              <Button asChild variant="outline" className="mr-2">
-                <RouterLink to="/events/cultural">Events</RouterLink>
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="mr-2">
+                    Events
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem asChild>
+                    <RouterLink to="/events/cultural">Cultural Events</RouterLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <RouterLink to="/events/technical">Technical Events</RouterLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <RouterLink to="/events/sports">Sports Events</RouterLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <RouterLink to="/events/workshops">Workshops</RouterLink>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Button variant="destructive" onClick={handleLogout}>Log Out</Button>
             </div>
           </div>
@@ -420,10 +500,23 @@ const FacultyDashboard = () => {
                         <Label htmlFor="session-details">Session Details</Label>
                         <Textarea id="session-details" placeholder="Enter session details, schedule, etc." rows={3} value={sessionDetails} onChange= { e=>setSessionDetails(e.target.value)} />
                       </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="event-image">Event Image</Label>
+                        <Input 
+                          id="event-image" 
+                          type="file" 
+                          accept="image/*"
+                          onChange={(e) => setSelectedImage(e.target.files[0])}
+                        />
+                      </div>
                     </div>
                     
                     <DialogFooter>
-                      <Button variant="outline" onClick={() => setIsEventDialogOpen(false)}>Cancel</Button>
+                      <Button variant="outline" onClick={() => {
+                        setIsEventDialogOpen(false);
+                        resetForm();
+                      }}>Cancel</Button>
                       <Button onClick={handleAddEvent}>Add Event</Button>
                     </DialogFooter>
                   </DialogContent>
@@ -431,122 +524,30 @@ const FacultyDashboard = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {facevents.map(event => (
-                  <Card key={event.id} className="animate-fade-in">
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
-                        <CardTitle className="text-xl">{event.title}</CardTitle>
-                        <Badge variant={event.status === 'Upcoming' ? 'default' : 'outline'}>
-                          {event.status}
-                        </Badge>
-                      </div>
-                      <CardDescription>
-                        <div className="flex items-center space-x-1 text-sm">
-                          <CalendarDays size={14} />
-                          <span>{event.date}</span>
-                        </div>
-                        <div className="flex items-center space-x-1 text-sm mt-1">
-                          <MapPin size={14} />
-                          <span>{event.venue}</span>
-                        </div>
-                        <div className="flex items-center space-x-1 text-sm mt-1">
-                          <Users size={14} />
-                          <span>{event.participants} participants</span>
-                        </div>
-                      </CardDescription>
-                    </CardHeader>
-                    <CardFooter className="flex justify-between">
-                      <Button variant="outline">View Details</Button>
-                      <Button variant="secondary">Edit</Button>
-                    </CardFooter>
-                  </Card>
-                ))}
-                
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Card className="border-2 border-dashed border-gray-200 bg-transparent flex flex-col items-center justify-center p-6 h-[220px] cursor-pointer hover:bg-gray-50 transition-colors animate-fade-in">
-                      <PlusCircle size={32} className="text-gray-400 mb-4" />
-                      <h3 className="text-lg font-medium text-gray-600 mb-2">Add New Event</h3>
-                      <p className="text-sm text-gray-500 text-center">Click to add a new event you're coordinating</p>
-                    </Card>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[600px]">
-                    <DialogHeader>
-                      <DialogTitle>Add New Event</DialogTitle>
-                      <DialogDescription>
-                        Enter the details of the event you're coordinating
-                      </DialogDescription>
-                    </DialogHeader>
-                    
-                    <div className="grid gap-4 py-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="event-title">Event Title</Label>
-                          <Input id="event-title" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Enter event title" />
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <Label htmlFor="event-category">Category</Label>
-                          <Select value={category} onValueChange={(val)=>setCategory(val)}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select category" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="cultural">Cultural</SelectItem>
-                              <SelectItem value="technical">Technical</SelectItem>
-                              <SelectItem value="sports">Sports</SelectItem>
-                              <SelectItem value="workshops">Workshops</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="start-date">Start Date</Label>
-                          <Input id="start-date" type="date" value={startDate} onChange={e => setStartDate(e.target.value)}/>
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <Label htmlFor="end-date">End Date</Label>
-                          <Input id="end-date" type="date" value={endDate} onChange= { e=>setEndDate(e.target.value)} />
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="venue">Venue</Label>
-                        <Input id="venue" placeholder="Enter venue" value={venue} onChange= { e=>setVenue(e.target.value)}  />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="description">Description</Label>
-                        <Textarea id="description" placeholder="Enter event description" rows={3}value={description} onChange= { e=>setDescription(e.target.value)}  />
-                      </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="guest-name">Guest/Speaker Name</Label>
-                          <Input id="guest-name" placeholder="Enter name if applicable" value={guestName} onChange= { e=>setGuestName(e.target.value)} />
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <Label htmlFor="guest-contact">Guest/Speaker Contact</Label>
-                          <Input id="guest-contact" placeholder="Enter contact details" value={guestContact} onChange= { e=>setGuestContact(e.target.value)} />
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="session-details">Session Details</Label>
-                        <Textarea id="session-details" placeholder="Enter session details, schedule, etc." rows={3} value={sessionDetails} onChange= { e=>setSessionDetails(e.target.value)} />
-                      </div>
+                {facevents.map((event) => (
+                  <div key={event.id} className="bg-white rounded-lg shadow-md p-4">
+                    <img 
+                      src={event.image || '/placeholder.svg'} 
+                      alt={event.title}
+                      className="w-full h-48 object-cover rounded-md mb-4"
+                    />
+                    <h3 className="text-lg font-semibold mb-2">{event.title}</h3>
+                    <p className="text-sm text-gray-600 mb-2">{event.venue}</p>
+                    <p className="text-sm text-gray-600 mb-4">{new Date(event.start_date).toLocaleDateString()}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-purple-600">{event.category}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEditClick(event)}
+                        className="flex items-center space-x-1"
+                      >
+                        <Pencil size={14} />
+                        <span>Edit</span>
+                      </Button>
                     </div>
-                    
-                    <DialogFooter>
-                      <Button variant="outline" onClick={() => setIsEventDialogOpen(false)}>Cancel</Button>
-                      <Button onClick={handleAddEvent}>Add Event</Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                  </div>
+                ))}
               </div>
             </TabsContent>
             
@@ -838,6 +839,96 @@ const FacultyDashboard = () => {
       </main>
       
       <Footer />
+
+      {/* Edit Event Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Edit Event</DialogTitle>
+            <DialogDescription>
+              Update the details of your event
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-event-title">Event Title</Label>
+              <Input id="edit-event-title" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Enter event title" />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="edit-event-category">Category</Label>
+              <Select value={category} onValueChange={(val)=>setCategory(val)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="cultural">Cultural</SelectItem>
+                  <SelectItem value="technical">Technical</SelectItem>
+                  <SelectItem value="sports">Sports</SelectItem>
+                  <SelectItem value="workshops">Workshops</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="edit-event-start-date">Start Date</Label>
+              <Input id="edit-event-start-date" type="date" value={startDate} onChange={e => setStartDate(e.target.value)}/>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="edit-event-end-date">End Date</Label>
+              <Input id="edit-event-end-date" type="date" value={endDate} onChange= { e=>setEndDate(e.target.value)} />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="edit-event-venue">Venue</Label>
+              <Input id="edit-event-venue" placeholder="Enter venue" value={venue} onChange= { e=>setVenue(e.target.value)}  />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="edit-event-description">Description</Label>
+              <Textarea id="edit-event-description" placeholder="Enter event description" rows={3}value={description} onChange= { e=>setDescription(e.target.value)}  />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="edit-event-guest-name">Guest/Speaker Name</Label>
+              <Input id="edit-event-guest-name" placeholder="Enter name if applicable" value={guestName} onChange= { e=>setGuestName(e.target.value)} />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="edit-event-guest-contact">Guest/Speaker Contact</Label>
+              <Input id="edit-event-guest-contact" placeholder="Enter contact details" value={guestContact} onChange= { e=>setGuestContact(e.target.value)} />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="edit-event-session-details">Session Details</Label>
+              <Textarea id="edit-event-session-details" placeholder="Enter session details, schedule, etc." rows={3} value={sessionDetails} onChange= { e=>setSessionDetails(e.target.value)} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-event-image">Event Image</Label>
+              <Input 
+                id="edit-event-image" 
+                type="file" 
+                accept="image/*"
+                onChange={(e) => setSelectedImage(e.target.files[0])}
+              />
+              {editingEvent?.image && !selectedImage && (
+                <p className="text-sm text-gray-500">Current image: {editingEvent.image}</p>
+              )}
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => {
+              setIsEditDialogOpen(false);
+              resetForm();
+            }}>Cancel</Button>
+            <Button onClick={handleEditEvent}>Update Event</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

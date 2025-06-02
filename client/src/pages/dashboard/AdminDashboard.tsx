@@ -246,14 +246,14 @@ const StudentAchievementsDashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
-    localStorage.removeItem('facultyId');
+    localStorage.removeItem('adminId');
     
     toast({
       title: "Logged out successfully",
       description: "You have been logged out of the system."
     });
     
-    navigate('/login');
+    navigate('/login?role=admin');
   };
 
   // Filter and search achievements

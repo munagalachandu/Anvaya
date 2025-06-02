@@ -12,7 +12,8 @@ const eventSchema = new mongoose.Schema({
   guest_name: { type: String },
   guest_contact: { type: String },
   session_details: { type: String },
-  number_of_participants: { type: Number, default: 0 }
+  number_of_participants: { type: Number, default: 0 },
+  image: { type: String, default: '/placeholder.svg' } // Default placeholder image
 }, { timestamps: true });
 
 const Event = mongoose.model('Event', eventSchema);
