@@ -187,7 +187,7 @@ const EventDetails = () => {
           
           <div className="relative container mx-auto px-4 h-full flex items-end pb-8">
             <div className="text-white">
-              <Link to="/events" className="inline-flex items-center text-white/80 hover:text-white mb-4">
+              <Link to="/" className="inline-flex items-center text-white/80 hover:text-white mb-4">
                 <ArrowLeft className="mr-2" size={16} />
                 Back to Events
               </Link>
