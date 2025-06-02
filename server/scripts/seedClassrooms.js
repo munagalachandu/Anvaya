@@ -9,10 +9,10 @@ const MONGO_URI = process.env.MONGO_URI;
 async function seedClassrooms() {
   await mongoose.connect(MONGO_URI);
   const classrooms = [
-    { name: 'Room 1' },
-    { name: 'Room 2' },
-    { name: 'Room 3' },
-    { name: 'Room 4' }
+    { name: 'Room 103' },
+    { name: 'Room 501' },
+    { name: 'Room 502' },
+    { name: 'Room 503' }
   ];
   await Classroom.deleteMany({});
   await Classroom.insertMany(classrooms);

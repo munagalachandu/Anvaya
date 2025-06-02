@@ -43,11 +43,17 @@ router.get('/fac_events', verifyToken, async (req, res) => {
     res.json(events.map(e => ({
       id: e._id,
       title: e.event_name,
-      date: e.start_date,
+      start_date: e.start_date,
+      end_date: e.end_date,
       venue: e.venue,
       status: e.status,
       participants: e.number_of_participants || 0,
-      image: e.image
+      image: e.image,
+      description: e.description,
+      guest_name: e.guest_name,
+      guest_contact: e.guest_contact,
+      session_details: e.session_details,
+      category: e.category
     })));
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch events' });
@@ -225,6 +231,26 @@ router.put('/edit_events/:eventId', verifyToken, upload.single('image'), async (
   }
 });
 
+// Delete event (faculty only)
+router.delete('/delete_event/:eventId', verifyToken, async (req, res) => {
+  const eventId = req.params.eventId;
+  try {
+    const event = await Event.findOne({ _id: eventId, user: req.user.user_id });
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found or unauthorized' });
+    }
+    // Delete image from Cloudinary if not placeholder
+    if (event.image && event.image.includes('cloudinary') && !event.image.endsWith('/placeholder.svg')) {
+      const publicId = event.image.split('/').slice(-1)[0].split('.')[0];
+      await cloudinary.uploader.destroy(publicId);
+    }
+    await Event.findByIdAndDelete(eventId);
+    res.json({ success: true, message: 'Event deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting event:', err);
+    res.status(500).json({ success: false, error: 'Failed to delete event' });
+  }
+});
 
 router.get('/all_events', async (req, res) => {
   try {

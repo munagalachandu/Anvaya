@@ -64,7 +64,7 @@ const customFocusStyles = `
   }
 `;
 
-const classroomList = ["Room 1", "Room 2", "Room 3", "Room 4"];
+const classroomList = ["Room 103", "Room 501", "Room 502", "Room 503"];
 
 type SlotInfo = {
   status: string;
@@ -207,9 +207,6 @@ const FacultyDashboard = () => {
     }
   };
 
-  const capitalizeCategory = (cat) =>
-    cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase();
-
   const handleAddEvent = async () => {
     if (!localStorage.getItem("jwt_token")) {
       toast({
@@ -218,10 +215,9 @@ const FacultyDashboard = () => {
       });
       return;
     }
-
     const formData = new FormData();
     formData.append("title", title);
-    formData.append("category", capitalizeCategory(category));
+    formData.append("category", category);
     formData.append("start_date", startDate);
     formData.append("end_date", endDate);
     formData.append("venue", venue);
@@ -232,7 +228,6 @@ const FacultyDashboard = () => {
     if (selectedImage) {
       formData.append("image", selectedImage);
     }
-
     try {
       const response = await axios.post(
         `http://localhost:5001/api/fac_add_events`,
@@ -322,28 +317,35 @@ const FacultyDashboard = () => {
   };
 
   const handleBookingRequest = async (slot) => {
-    if (!selectedClassroom || !selectedDate || !slot) return;
+    if (!selectedClassroom || !selectedDate || !slot) {
+      toast({ title: "Error", description: "Please select a classroom, date, and slot." });
+      return;
+    }
     try {
-      await axiosInstance.post("/bookings/request", {
+      const res = await axiosInstance.post("/bookings/request", {
         classroom: selectedClassroom,
         date: selectedDate,
         slot,
-        year: null, // or remove if not needed
+        year: 2 // or get from context if available
       });
       toast({
         title: "Booking requested",
         description: "Your booking request has been submitted.",
       });
-      // Optionally refresh bookings or classroomSlots
+      // Refresh bookings
       axiosInstance
-        .get(
-          `/full-timetable/classroom?date=${selectedDate}&classroom=${encodeURIComponent(
-            selectedClassroom
-          )}`
-        )
-        .then((res) => setClassroomSlots(res.data.slots || {}));
-    } catch {
-      toast({ title: "Error", description: "Failed to request booking." });
+        .get(`/bookings?facultyId=${facultyId}`)
+        .then((res) => setMyBookings(res.data));
+    } catch (err) {
+      let errorMsg = "Failed to request booking.";
+      if (err.response?.data?.error) {
+        errorMsg = err.response.data.error;
+      } else if (err.message) {
+        errorMsg = err.message;
+      }
+      toast({ title: "Error", description: errorMsg });
+      // Extra logging for debugging
+      console.error("Booking request error:", err, err?.response?.data);
     }
   };
 
@@ -385,10 +387,9 @@ const FacultyDashboard = () => {
 
   const handleEditEvent = async () => {
     if (!editingEvent) return;
-
     const formData = new FormData();
     formData.append("title", title);
-    formData.append("category", capitalizeCategory(category));
+    formData.append("category", category);
     formData.append("start_date", startDate);
     formData.append("end_date", endDate);
     formData.append("venue", venue);
@@ -399,7 +400,6 @@ const FacultyDashboard = () => {
     if (selectedImage) {
       formData.append("image", selectedImage);
     }
-
     try {
       const response = await axios.put(
         `http://localhost:5001/api/edit_events/${editingEvent.id}`,
@@ -447,16 +447,38 @@ const FacultyDashboard = () => {
 
   const handleEditClick = (event) => {
     setEditingEvent(event);
-    setTitle(event.title);
-    setCategory(event.category.toLowerCase());
-    setStartDate(event.start_date.split("T")[0]);
-    setEndDate(event.end_date.split("T")[0]);
-    setVenue(event.venue);
-    setDescription(event.description);
+    setTitle(event.title || "");
+    setCategory((event.category || "").toLowerCase());
+    setStartDate(event.start_date ? event.start_date.split("T")[0] : "");
+    setEndDate(event.end_date ? event.end_date.split("T")[0] : "");
+    setVenue(event.venue || "");
+    setDescription(event.description || "");
     setGuestName(event.guest_name || "");
     setGuestContact(event.guest_contact || "");
     setSessionDetails(event.session_details || "");
+    setSelectedImage(null);
     setIsEditDialogOpen(true);
+  };
+
+  const handleDeleteEvent = async (eventId: string) => {
+    if (!window.confirm('Are you sure you want to delete this event? This action cannot be undone.')) return;
+    try {
+      const response = await fetch(`http://localhost:5001/api/delete_event/${eventId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('jwt_token')}`,
+        },
+      });
+      const data = await response.json();
+      if (response.ok && data.success) {
+        toast({ title: 'Event deleted', description: 'The event was deleted successfully.' });
+        fetchEvents();
+      } else {
+        toast({ title: 'Error', description: data.error || 'Failed to delete event.' });
+      }
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to delete event. Please try again.' });
+    }
   };
 
   return (
@@ -561,14 +583,10 @@ const FacultyDashboard = () => {
                               <SelectValue placeholder="Select category" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="cultural">Cultural</SelectItem>
-                              <SelectItem value="technical">
-                                Technical
-                              </SelectItem>
-                              <SelectItem value="sports">Sports</SelectItem>
-                              <SelectItem value="workshops">
-                                Workshops
-                              </SelectItem>
+                              <SelectItem value="Cultural">Cultural</SelectItem>
+                              <SelectItem value="Technical">Technical</SelectItem>
+                              <SelectItem value="Sports">Sports</SelectItem>
+                              <SelectItem value="Workshops">Workshops</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -709,15 +727,26 @@ const FacultyDashboard = () => {
                       <span className="text-sm font-medium text-purple-600">
                         {event.category}
                       </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEditClick(event)}
-                        className="flex items-center space-x-1"
-                      >
-                        <Pencil size={14} />
-                        <span>Edit</span>
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEditClick(event)}
+                          className="flex items-center space-x-1"
+                        >
+                          <Pencil size={14} />
+                          <span>Edit</span>
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => handleDeleteEvent(event.id)}
+                          className="flex items-center space-x-1"
+                        >
+                          <X size={14} />
+                          <span>Delete</span>
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -1019,6 +1048,10 @@ const FacultyDashboard = () => {
                                         <span className="text-yellow-700">
                                           Lunch Break
                                         </span>
+                                      ) : info.status === "Booked" ? (
+                                        <span className="text-red-700">
+                                          Booked
+                                        </span>
                                       ) : (
                                         <span className="text-blue-700">
                                           {info.subject}
@@ -1026,10 +1059,10 @@ const FacultyDashboard = () => {
                                       )}
                                     </td>
                                     <td className="px-2 py-1 border">
-                                      {info.year ? `${info.year} year` : "-"}
+                                      {info.status === "Available" || info.status === "Lunch Break" ? '-' : (info.year ? `${info.year} year` : '-')}
                                     </td>
                                     <td className="px-2 py-1 border">
-                                      {info.status === "Available" && (
+                                      {info.status === "Available" ? (
                                         <Button
                                           size="sm"
                                           variant="outline"
@@ -1039,7 +1072,11 @@ const FacultyDashboard = () => {
                                         >
                                           Book
                                         </Button>
-                                      )}
+                                      ) : info.status === "Booked" ? (
+                                        <span className="text-red-500 font-semibold">
+                                          Booked
+                                        </span>
+                                      ) : null}
                                     </td>
                                   </tr>
                                 );
@@ -1069,7 +1106,7 @@ const FacultyDashboard = () => {
                           {myBookings.length > 0 ? (
                             myBookings.map((b) => (
                               <tr key={b._id}>
-                                <td className="px-2 py-1">{b.classroom}</td>
+                                <td className="px-2 py-1">{typeof b.classroom === 'object' && b.classroom !== null ? b.classroom.name : b.classroom}</td>
                                 <td className="px-2 py-1">{b.date}</td>
                                 <td className="px-2 py-1">{b.slot}</td>
                                 <td className="px-2 py-1">{b.year}</td>
@@ -1143,10 +1180,10 @@ const FacultyDashboard = () => {
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="cultural">Cultural</SelectItem>
-                  <SelectItem value="technical">Technical</SelectItem>
-                  <SelectItem value="sports">Sports</SelectItem>
-                  <SelectItem value="workshops">Workshops</SelectItem>
+                  <SelectItem value="Cultural">Cultural</SelectItem>
+                  <SelectItem value="Technical">Technical</SelectItem>
+                  <SelectItem value="Sports">Sports</SelectItem>
+                  <SelectItem value="Workshops">Workshops</SelectItem>
                 </SelectContent>
               </Select>
             </div>
