@@ -104,7 +104,7 @@ router.post('/fac_add_events', verifyToken, upload.single('image'), async (req, 
   }
 });
 
-// Get events for a student (for now, return all events)
+
 router.get('/student_events/:studentId', verifyToken, async (req, res) => {
   try {
     const events = await Event.find();
@@ -167,7 +167,7 @@ router.post('/events/:eventId/register', verifyToken, async (req, res) => {
 });
 
 // Edit event
-router.put('/events/:eventId', verifyToken, upload.single('image'), async (req, res) => {
+router.put('/edit_events/:eventId', verifyToken, upload.single('image'), async (req, res) => {
   const eventId = req.params.eventId;
   const { title, category, start_date, end_date, venue, description, guest_name, guest_contact, session_details } = req.body;
   
@@ -224,5 +224,19 @@ router.put('/events/:eventId', verifyToken, upload.single('image'), async (req, 
     res.status(500).json({ success: false, error: 'Failed to update event' });
   }
 });
+
+
+router.get('/all_events', async (req, res) => {
+  try {
+    const events = await Event.find(); // no populate, just raw events
+    res.status(200).json(events);
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    res.status(500).json({ message: 'Server error fetching events' });
+  }
+});
+
+
+
 
 export default router; 

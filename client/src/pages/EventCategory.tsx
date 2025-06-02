@@ -5,7 +5,6 @@ import EventCard from '../components/EventCard';
 import { Button } from '@/components/ui/button';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import axios from 'axios';
 
 const categoryTitles: Record<string, string> = {
   cultural: 'Cultural Events',
@@ -31,6 +30,7 @@ interface Event {
   registrationUrl?: string;
   brochureUrl?: string;
   isPast?: boolean;
+  description?: string;
 }
 
 const EventCategory: React.FC = () => {
@@ -64,12 +64,35 @@ const EventCategory: React.FC = () => {
     // Fetch events for the category
     const fetchEvents = async () => {
       try {
-        const response = await axios.get(`http://localhost:5001/api/events/category/${category}`);
+        console.log('Fetching events for category:', category); // Debug log
+        
+        // Use the same API endpoint as your Index component
+        const response = await fetch('http://localhost:5001/api/all_events');
+        
+        console.log('API response status:', response.status); // Debug log
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch events');
+        }
+        
+        const data = await response.json();
+        console.log('Raw API data:', data); // Debug log
+        
+        // Filter events by category (case-insensitive comparison)
+        const categoryEvents = data.filter((event: any) => 
+          event.category.toLowerCase() === category?.toLowerCase()
+        );
+        
+        console.log('Filtered category events:', categoryEvents); // Debug log
+        
         const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0); // Normalize to start of day
         
         // Sort events into upcoming, city level, and past
-        const sortedEvents = response.data.reduce((acc: any, event: any) => {
+        const sortedEvents = categoryEvents.reduce((acc: any, event: any) => {
           const eventDate = new Date(event.start_date);
+          eventDate.setHours(0, 0, 0, 0); // Normalize to start of day
+          
           const eventObj = {
             id: event._id,
             title: event.event_name,
@@ -79,6 +102,8 @@ const EventCategory: React.FC = () => {
             category: event.category.toLowerCase() as 'cultural' | 'sports' | 'technical' | 'workshops',
             description: event.description
           };
+
+          console.log(`Event ${event.event_name}: eventDate=${eventDate}, currentDate=${currentDate}, isPast=${eventDate < currentDate}`); // Debug log
 
           if (eventDate < currentDate) {
             acc.past.push({ ...eventObj, isPast: true });
@@ -90,6 +115,7 @@ const EventCategory: React.FC = () => {
           return acc;
         }, { upcoming: [], cityLevel: [], past: [] });
 
+        console.log('Sorted events:', sortedEvents); // Debug log
         setEvents(sortedEvents);
         setLoading(false);
       } catch (err) {
@@ -145,6 +171,13 @@ const EventCategory: React.FC = () => {
         
         {/* Events Grid */}
         <div className="container mx-auto px-4 py-12">
+          {/* Show message if no events found */}
+          {events.upcoming.length === 0 && events.cityLevel.length === 0 && events.past.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-gray-600">No events found for this category.</p>
+            </div>
+          )}
+
           {/* Upcoming Events */}
           {events.upcoming.length > 0 && (
             <section className="mb-12">

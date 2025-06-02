@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import GridNavigation from '../components/GridNavigation';
@@ -7,218 +7,121 @@ import EventCard from '../components/EventCard';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-// Demo data
-const upcomingEvents = [
-  {
-    id: '1',
-    title: 'Lumina 2024',
-    date: 'Nov 9, 2024',
-    venue: 'CD Sagar Auditorium',
-    image: 'cultural.jpg',
-    category: 'cultural',
-    registrationUrl: '#',
-    brochureUrl: '#'
-  },
-  {
-    id: '2',
-    title: 'Aventus 3.0',
-    date: 'May 17-18, 2024',
-    venue: 'AIML Dept',
-    image: 'techaventus.jpg',
-    category: 'technical',
-    registrationUrl: '#',
-    brochureUrl: '#'
-  },
-  {
-    id: '3',
-    title: 'Utsaha',
-    date: 'April 04-05, 2023',
-    venue: 'FootBall Ground',
-    image: 'sportutsaha.jpg',
-    category: 'sports',
-    registrationUrl: '#',
-    brochureUrl: '#'
-  }
-];
-
-const recentEvents = [
-  {
-    id: '4',
-    title: 'Web Development Workshop',
-    date: 'April 10, 2025',
-    venue: 'Online',
-    image: 'webdev.jpg',
-    category: 'workshops',
-    isPast: true
-  },
-  {
-    id: '5',
-    title: 'Technical Symposium',
-    date: 'April 2-4, 2025',
-    venue: 'CS Department',
-    image: 'tech.jpg',
-    category: 'technical',
-    isPast: true
-  },
-  {
-    id: '6',
-    title: 'Cultural Competition',
-    date: 'March 15, 2025',
-    venue: 'Main Auditorium',
-    image: 'culturalevent.jpg',
-    category: 'cultural',
-    isPast: true
-  }
-];
 
 const Index = () => {
-  const carouselItems = upcomingEvents.map(event => (
-    <div key={event.id} className="relative h-[400px] w-full">
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
-      
-      {/* Background image */}
-      <img
-        src={event.image}
-        alt={event.title}
-        className="absolute inset-0 w-full h-full object-cover"
-      />
-      
-      {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 p-6 text-white">
-        <div className="inline-block px-2 py-1 bg-primary text-white text-xs uppercase tracking-wider rounded mb-2">
-          {event.category}
-        </div>
-        <h2 className="text-3xl font-bold mb-2">{event.title}</h2>
-        <div className="flex items-center space-x-2 mb-4 text-white/90">
-          <span>{event.date} • {event.venue}</span>
-        </div>
-        <Link to={`/events/${event.category}/${event.id}`}>
-          <Button>Explore Event</Button>
-        </Link>
-      </div>
-    </div>
-  ));
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        console.log('Starting API call to /api/all_events'); // Debug log
+        // Try with full URL - replace 5000 with your actual backend port
+        const res = await fetch('http://localhost:5001/api/all_events');
+        console.log('API response status:', res.status, res.statusText); // Debug log
+        
+        if (!res.ok) {
+          console.error('API response not ok:', res.status, res.statusText);
+          throw new Error('Failed to fetch events');
+        }
+        
+        const data = await res.json();
+        console.log('Raw API data:', data); // Debug log
+        console.log('Data type:', typeof data, 'Is array:', Array.isArray(data)); // Debug log
+
+        // Map API data into our event structure
+        const mappedEvents = data.map(event => ({
+          id: event._id,
+          title: event.event_name,
+          date: event.start_date, // Keep as 'date' for consistency
+          venue: event.venue,
+          image: event.image,
+          category: event.category,
+        }));
+
+        console.log('Mapped events:', mappedEvents); // Debug log
+        setEvents(mappedEvents);
+      } catch (err) {
+        console.error('Error fetching events:', err);
+        console.error('Full error object:', err); // More detailed error logging
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchEvents();
+  }, []);
+
+  // Helper to normalize event date to start of day
+  function normalizeDate(dateString) {
+    const d = new Date(dateString);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  // Normalize today's date to start of day
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  console.log('Events state:', events); // Debug log
+  console.log('Events length:', events.length); // Debug log
+  console.log('Loading state:', loading); // Debug log
+
+  // Filter valid events with valid start dates
+  const validEvents = events.filter(e => {
+    const d = new Date(e.date);
+    const isValid = e.date && !isNaN(d.getTime());
+    console.log(`Event ${e.title}: date=${e.date}, isValid=${isValid}`); // Debug log
+    return isValid;
+  });
+
+  console.log('Valid events:', validEvents); // Debug log
+
+  // Sort events by date ascending (earliest first)
+  const sortedEvents = validEvents.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+  
+    // If invalid date, treat as earliest date (so it goes to end)
+    const timeA = isNaN(dateA.getTime()) ? 0 : dateA.getTime();
+    const timeB = isNaN(dateB.getTime()) ? 0 : dateB.getTime();
+  
+    return timeA - timeB; // ascending order: earliest date first
+  });
+
+  console.log('Sorted events:', sortedEvents); // Debug log
+
+  // Just show all events instead of filtering by upcoming/recent
+  const allEvents = sortedEvents;
+
+  console.log('All events to display:', allEvents); // Debug log
+
+  // Upcoming: start_date >= today (using normalized dates)
+  const upcomingEvents = sortedEvents.filter(event => {
+    const eventDate = normalizeDate(event.date);
+    const isUpcoming = eventDate >= today;
+    console.log(`Event ${event.title}: eventDate=${eventDate}, today=${today}, isUpcoming=${isUpcoming}`); // Debug log
+    return isUpcoming;
+  });
+
+  console.log('Upcoming events:', upcomingEvents); // Debug log
+
+  // Recent: start_date < today, max 5
+  const recentEvents = sortedEvents.filter(event => {
+    const eventDate = normalizeDate(event.date);
+    const isRecent = eventDate < today;
+    console.log(`Event ${event.title}: eventDate=${eventDate}, today=${today}, isRecent=${isRecent}`); // Debug log
+    return isRecent;
+  }).slice(0, 5);
+
+  console.log('Recent events:', recentEvents); // Debug log
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      
-      <main className="flex-grow">
-        {/* Grid Navigation */}
-        <GridNavigation />
-        
-  {/* Dynamic Banner with 3D Animation and Purple Gradients - All included */}
-<section className="relative min-h-[500px] flex items-center overflow-hidden">
-  {/* Base gradient background */}
-  <div className="absolute inset-0 bg-gradient-to-br from-purple-300 via-purple-200 to-pink-100">
-    {/* Animated 3D gradient shapes */}
-    <div className="absolute inset-0" style={{
-      background: `radial-gradient(circle at 20% 30%, rgba(216, 180, 254, 0.4) 0%, rgba(216, 180, 254, 0) 50%),
-                  radial-gradient(circle at 80% 60%, rgba(233, 213, 255, 0.4) 0%, rgba(233, 213, 255, 0) 60%),
-                  radial-gradient(circle at 50% 50%, rgba(245, 208, 254, 0.2) 0%, rgba(245, 208, 254, 0) 70%)`,
-    }}></div>
-    
-    {/* Moving background elements with inline animations */}
-    <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-purple-400/30 to-pink-300/30 rounded-full blur-3xl" 
-         style={{
-           animation: 'float 15s ease-in-out infinite',
-         }}></div>
-    <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-gradient-to-br from-purple-300/30 to-indigo-300/30 rounded-full blur-3xl" 
-         style={{
-           animation: 'float-delay 18s ease-in-out infinite',
-         }}></div>
-    
-    {/* 3D floating elements with inline animations */}
-    <div className="absolute top-1/4 left-1/4 w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-500 rounded-lg shadow-lg transform rotate-12 opacity-30"
-         style={{
-           animation: 'float 15s ease-in-out infinite',
-         }}></div>
-    <div className="absolute bottom-1/3 right-1/3 w-24 h-24 bg-gradient-to-br from-purple-300 to-pink-400 rounded-full shadow-lg opacity-20"
-         style={{
-           animation: 'float-delay 18s ease-in-out infinite',
-         }}></div>
-    <div className="absolute top-1/2 right-1/4 w-12 h-12 bg-gradient-to-br from-indigo-300 to-purple-400 rounded-lg shadow-lg transform -rotate-12 opacity-30"
-         style={{
-           animation: 'pulse 6s ease-in-out infinite',
-         }}></div>
-  </div>
-  
-  {/* Content with 3D effect */}
-  <div className="container mx-auto px-6 relative z-10">
-    <div className="max-w-3xl mx-auto text-center">
-      <h1 className="text-4xl md:text-6xl font-bold mb-6 text-purple-900 drop-shadow-md transition-transform duration-500 hover:scale-105">
-        Welcome to Anvaya
-      </h1>
-      <p className="text-lg md:text-xl mb-8 text-purple-800 drop-shadow transition-all duration-500 hover:translate-y-1">
-        Connecting students, faculty, and the community through enriching events 
-        and experiences. Anvaya serves as a platform to showcase talent, foster 
-        learning, and build lasting connections.
-      </p>
-      <div className="flex flex-wrap justify-center gap-4">
-        <Button 
-          variant="outline" 
-          className="text-purple-700 border-purple-400 hover:bg-purple-50 font-medium px-6 py-3 rounded-md shadow transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-          Learn More
-        </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button 
-              className="bg-purple-600 text-white hover:bg-purple-700 font-medium px-6 py-3 rounded-md shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-              Browse Events
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuItem asChild>
-              <Link to="/events/cultural" className="cursor-pointer">Cultural Events</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/events/technical" className="cursor-pointer">Technical Events</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/events/sports" className="cursor-pointer">Sports Events</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/events/workshops" className="cursor-pointer">Workshops</Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </div>
-  </div>
-  
-  {/* Foreground glass effect */}
-  <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white/20 to-transparent backdrop-blur-sm"></div>
 
-  {/* Embedded style for animations - this stays within the component */}
-  <style dangerouslySetInnerHTML={{__html: `
-    @keyframes float {
-      0% { transform: translateY(0) rotate(0); }
-      50% { transform: translateY(-20px) rotate(5deg); }
-      100% { transform: translateY(0) rotate(0); }
-    }
-    
-    @keyframes float-delay {
-      0% { transform: translateY(0) rotate(0); }
-      50% { transform: translateY(-15px) rotate(-5deg); }
-      100% { transform: translateY(0) rotate(0); }
-    }
-    
-    @keyframes pulse {
-      0% { transform: scale(1) rotate(-12deg); }
-      50% { transform: scale(1.1) rotate(-8deg); }
-      100% { transform: scale(1) rotate(-12deg); }
-    }
-  `}} />
-</section>
-        {/* Carousel Section */}
+      <main className="flex-grow">
+        <GridNavigation />
+
         <section className="py-16">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-8">
@@ -228,38 +131,68 @@ const Index = () => {
                 <ArrowRight size={18} />
               </Link>
             </div>
-            
+
             <div className="h-[400px]">
-              <EventCarousel>
-                {carouselItems}
-              </EventCarousel>
+              {loading ? (
+                <p>Loading upcoming events...</p>
+              ) : upcomingEvents.length ? (
+                <EventCarousel>
+                  {upcomingEvents.map(event => (
+                    <div key={event.id} className="relative h-[400px] w-full">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
+                      <img
+                        src={event.image}
+                        alt={event.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 z-20 p-6 text-white">
+                        <div className="inline-block px-2 py-1 bg-primary text-white text-xs uppercase tracking-wider rounded mb-2">
+                          {event.category}
+                        </div>
+                        <h2 className="text-3xl font-bold mb-2">{event.title}</h2>
+                        <div className="flex items-center space-x-2 mb-4 text-white/90">
+                          <span>{new Date(event.date).toLocaleDateString()} • {event.venue}</span>
+                        </div>
+                        <Link to={`/events/${event.category}/${event.id}`}>
+                          <Button>Explore Event</Button>
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </EventCarousel>
+              ) : (
+                <p>No upcoming events available.</p>
+              )}
             </div>
           </div>
         </section>
-        
-        {/* Recent Highlights Section */}
+
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-8">Recent Highlights</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {recentEvents.map((event) => (
-                <EventCard 
-                  key={event.id}
-                  id={event.id}
-                  title={event.title}
-                  date={event.date}
-                  venue={event.venue}
-                  image={event.image}
-                  category={event.category as 'cultural' | 'sports' | 'technical' | 'workshops'}
-                  isPast={event.isPast}
-                />
-              ))}
-            </div>
+            <h2 className="text-2xl font-bold mb-8 text-gray-800">Recent Events</h2>
+            {loading ? (
+              <p>Loading recent events...</p>
+            ) : recentEvents.length ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                {recentEvents.map(event => (
+                  <EventCard
+                    key={event.id}
+                    id={event.id}
+                    title={event.title}
+                    date={event.date}
+                    venue={event.venue}
+                    image={event.image}
+                    category={event.category}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p>No recent events available.</p>
+            )}
           </div>
         </section>
       </main>
-      
+
       <Footer />
     </div>
   );

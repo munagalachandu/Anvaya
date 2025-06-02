@@ -402,7 +402,7 @@ const FacultyDashboard = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:5001/api/events/${editingEvent.id}`,
+        `http://localhost:5001/api/edit_events/${editingEvent.id}`,
         formData,
         {
           headers: {
