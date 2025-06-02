@@ -120,7 +120,7 @@ const StudentAchievementsDashboard = () => {
       }
 
       const response = await axios.get(
-        `http://localhost:5001/api/student_events_verify/${adminId}`,
+        `http://localhost:5001/api/student_events_verify`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
