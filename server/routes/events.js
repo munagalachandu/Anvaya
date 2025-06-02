@@ -543,4 +543,46 @@ router.post('/events/student/:eventId/register', verifyToken, async (req, res) =
   }
 });
 
+
+// Add this route to your Express router
+router.get('/getparticipants/:eventId', verifyToken, async (req, res) => {
+  try {
+    const eventId = req.params.eventId;
+
+    // Check if event exists
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    // Check if user is authorized to view participants (event creator)
+    if (event.user.toString() !== req.user.user_id) {
+      return res.status(403).json({ error: 'Unauthorized to view participants for this event' });
+    }
+const numberOfParticipants = event.number_of_participants || 0;
+    const registrations = await EventRegistration.find({ event: eventId })
+      .sort({ registrationDate: -1 });
+
+    const participants = registrations.map(reg => ({
+      id: reg._id,
+      name: reg.name,
+      semester: reg.semester,
+      teamName: reg.teamName,
+      phone: reg.phone,
+      email: reg.email,
+      collegeName: reg.collegeName,
+      registrationDate: reg.registrationDate
+    }));
+
+    res.status(200).json(participants);
+
+  } catch (err) {
+    console.error('Error fetching participants:', err);
+    if (err.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid event ID format' });
+    }
+    res.status(500).json({ error: 'Failed to fetch participants' });
+  }
+});
+
 export default router; 

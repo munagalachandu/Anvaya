@@ -88,6 +88,7 @@ const FacultyDashboard = () => {
   const [guestName, setGuestName] = useState("");
   const [guestContact, setGuestContact] = useState("");
   const [sessionDetails, setSessionDetails] = useState("");
+  
 
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -112,6 +113,10 @@ const FacultyDashboard = () => {
     "15:00-16:00",
     "16:00-17:00",
   ];
+  const [isParticipantsDialogOpen, setIsParticipantsDialogOpen] = useState(false);
+const [selectedEventParticipants, setSelectedEventParticipants] = useState([]);
+const [selectedEventForParticipants, setSelectedEventForParticipants] = useState(null);
+const [loadingParticipants, setLoadingParticipants] = useState(false);
   const [myBookings, setMyBookings] = useState([]);
   const [dateMode, setDateMode] = useState("single");
   const [rangeStart, setRangeStart] = useState("");
@@ -160,6 +165,39 @@ const FacultyDashboard = () => {
       setClassroomSlots({});
     }
   }, [selectedDate, selectedClassroom]);
+
+  
+  const fetchEventParticipants = async (eventId) => {
+    setLoadingParticipants(true);
+    try {
+      const response = await axios.get(
+        `http://localhost:5001/api/getparticipants/${eventId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setSelectedEventParticipants(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching participants:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch participants.frontend eror Please try again.",
+      });
+      setSelectedEventParticipants([]);
+    } finally {
+      setLoadingParticipants(false);
+    }
+  };
+  
+  const handleViewParticipants = (event) => {
+    setSelectedEventForParticipants(event);
+    setIsParticipantsDialogOpen(true);
+    fetchEventParticipants(event.id);
+  };
 
   const fetchEvents = async () => {
     try {
@@ -229,6 +267,7 @@ const FacultyDashboard = () => {
     formData.append("guest_name", guestName);
     formData.append("guest_contact", guestContact);
     formData.append("session_details", sessionDetails);
+    
     if (selectedImage) {
       formData.append("image", selectedImage);
     }
@@ -709,16 +748,27 @@ const FacultyDashboard = () => {
                       <span className="text-sm font-medium text-purple-600">
                         {event.category}
                       </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEditClick(event)}
-                        className="flex items-center space-x-1"
-                      >
+                      <div className="flex items-center space-x-2">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => handleViewParticipants(event)}
+        className="flex items-center space-x-1"
+      >
+        <Users size={14} />
+        <span>{event.participants || 0}</span>
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => handleEditClick(event)}
+        className="flex items-center space-x-1"
+      >
                         <Pencil size={14} />
                         <span>Edit</span>
                       </Button>
                     </div>
+                  </div>
                   </div>
                 ))}
               </div>
@@ -1257,6 +1307,97 @@ const FacultyDashboard = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+
+{/* Participants Dialog */}
+<Dialog open={isParticipantsDialogOpen} onOpenChange={setIsParticipantsDialogOpen}>
+  <DialogContent className="sm:max-w-[900px] max-h-[80vh]">
+    <DialogHeader>
+      <DialogTitle>Event Participants</DialogTitle>
+      <DialogDescription>
+        {selectedEventForParticipants?.title} - Registered Participants
+      </DialogDescription>
+    </DialogHeader>
+
+    <div className="py-4 max-h-[60vh] overflow-y-auto">
+      {loadingParticipants ? (
+        <div className="flex justify-center p-8">
+          <div className="animate-spin h-8 w-8 border-4 border-gray-300 rounded-full border-t-blue-600"></div>
+        </div>
+      ) : selectedEventParticipants.length > 0 ? (
+        <div className="rounded-md border">
+          <div className="grid grid-cols-12 gap-2 p-3 font-medium bg-gray-50 border-b text-sm">
+            <div className="col-span-2">Name</div>
+            <div className="col-span-2">Email</div>
+            <div className="col-span-1">Phone</div>
+            <div className="col-span-1">Sem</div>
+            <div className="col-span-2">College</div>
+            <div className="col-span-2">Team Name</div>
+            <div className="col-span-2">Registration Date</div>
+          </div>
+
+          {selectedEventParticipants.map((participant, index) => (
+            <div
+              key={participant.id || index}
+              className="grid grid-cols-12 gap-2 p-3 items-center border-b last:border-b-0 text-sm"
+            >
+              <div className="col-span-2">
+                <div className="flex items-center gap-2">
+                  <User size={16} className="text-gray-500" />
+                  <span className="truncate">{participant.name}</span>
+                </div>
+              </div>
+              <div className="col-span-2">
+                <span className="truncate text-gray-600">{participant.email}</span>
+              </div>
+              <div className="col-span-1">
+                <span className="text-gray-600">{participant.phone}</span>
+              </div>
+              <div className="col-span-1">
+                <Badge variant="outline" className="w-fit">
+                  {participant.sem}
+                </Badge>
+              </div>
+              <div className="col-span-2">
+                <span className="truncate text-gray-600">{participant.college}</span>
+              </div>
+              <div className="col-span-2">
+                <span className="truncate text-gray-600">
+                  {participant.team_name || 'Individual'}
+                </span>
+              </div>
+              <div className="col-span-2">
+                <span className="text-gray-600">
+                  {new Date(participant.registration_date).toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center p-8 bg-gray-50 rounded-md">
+          <Users size={36} className="mx-auto text-gray-400 mb-4" />
+          <h3 className="text-lg font-medium text-gray-700 mb-2">
+            No Participants Found
+          </h3>
+          <p className="text-gray-500">
+            No one has registered for this event yet.
+          </p>
+        </div>
+      )}
+    </div>
+
+    <DialogFooter>
+      <Button
+        variant="outline"
+        onClick={() => setIsParticipantsDialogOpen(false)}
+      >
+        Close
+      </Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
     </div>
   );
 };
