@@ -28,22 +28,26 @@ mongoose.connect(process.env.MONGO_URI, {
 // Function to seed users
 const seedUsers = async () => {
   try {
-    const hashedPassword1 = await bcrypt.hash('password123', 10);
-    const hashedPassword2 = await bcrypt.hash('password456', 10);
-    const hashedPassword3 = await bcrypt.hash('password789', 10);
-    const hashedPassword4 = await bcrypt.hash('password101', 10);
+    const userCount = await User.countDocuments();
+    if (userCount === 0) {
+      // Only seed if no users exist
+      const hashedPassword1 = await bcrypt.hash('password123', 10);
+      const hashedPassword2 = await bcrypt.hash('password456', 10);
+      const hashedPassword3 = await bcrypt.hash('password789', 10);
+      const hashedPassword4 = await bcrypt.hash('password101', 10);
 
-    const users = [
-      { name: 'Admin User', email: 'admin@example.com', password: hashedPassword1, role: 'admin' },
-      { name: 'Faculty User', email: 'faculty@example.com', password: hashedPassword2, role: 'faculty' },
-      { name: 'Student One', email: 'student1@example.com', password: hashedPassword3, role: 'student' },
-      { name: 'Student Two', email: 'student2@example.com', password: hashedPassword4, role: 'student' },
-    ];
+      const users = [
+        { name: 'Admin User', email: 'admin@example.com', password: hashedPassword1, role: 'admin' },
+        { name: 'Faculty User', email: 'faculty@example.com', password: hashedPassword2, role: 'faculty' },
+        { name: 'Student One', email: 'student1@example.com', password: hashedPassword3, role: 'student' },
+        { name: 'Student Two', email: 'student2@example.com', password: hashedPassword4, role: 'student' },
+      ];
 
-    
-    await User.deleteMany(); // Clear existing users to avoid duplicates
-    const insertedUsers = await User.insertMany(users);
-    console.log('Users seeded successfully:', insertedUsers);
+      await User.insertMany(users);
+      console.log('Users seeded successfully');
+    } else {
+      console.log('Users already exist, skipping seeding');
+    }
   } catch (error) {
     console.error('Error seeding users:', error);
   }
