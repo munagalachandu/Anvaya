@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
+import EventDetails from "./pages/EventDetails";
 import Login from "./pages/Login";
 import EventCategory from "./pages/EventCategory";
 import StudentDashboard from "./pages/dashboard/StudentDashboard";
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/dashboard/admin" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/events/:category/:id" element={<EventDetails />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

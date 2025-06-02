@@ -153,7 +153,7 @@ router.get('/events', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch events' });
   }
 });
-
+/*
 // Register for an event
 router.post('/events/:eventId/register', verifyToken, async (req, res) => {
   const eventId = req.params.eventId;
@@ -165,7 +165,7 @@ router.post('/events/:eventId/register', verifyToken, async (req, res) => {
   await reg.save();
   res.json({ success: true });
 });
-
+*/
 // Edit event
 router.put('/edit_events/:eventId', verifyToken, upload.single('image'), async (req, res) => {
   const eventId = req.params.eventId;
@@ -236,7 +236,175 @@ router.get('/all_events', async (req, res) => {
   }
 });
 
+// Add these routes to your existing event routes file
 
+// Get single event by ID (for event details page)
+router.get('/events/:id', async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const event = await Event.findById(eventId).populate('user', 'name email');
+    
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    // Return the event with all details
+    res.json({
+      _id: event._id,
+      event_name: event.event_name,
+      category: event.category,
+      status: event.status,
+      start_date: event.start_date,
+      end_date: event.end_date,
+      venue: event.venue,
+      description: event.description,
+      guest_name: event.guest_name,
+      guest_contact: event.guest_contact,
+      session_details: event.session_details,
+      number_of_participants: event.number_of_participants || 0,
+      image: event.image,
+      createdAt: event.createdAt,
+      updatedAt: event.updatedAt,
+      organizer: event.user ? {
+        name: event.user.name,
+        email: event.user.email
+      } : null
+    });
+  } catch (err) {
+    console.error('Error fetching event details:', err);
+    if (err.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid event ID format' });
+    }
+    res.status(500).json({ error: 'Failed to fetch event details' });
+  }
+});
+
+// Register for an event (without authentication - public registration)
+router.post('/events/:id/register', async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const { name, semester, teamName, phone, email, collegeName } = req.body;
+
+    // Validate required fields
+    if (!name || !semester || !phone || !email || !collegeName) {
+      return res.status(400).json({ 
+        error: 'Missing required fields. Please provide name, semester, phone, email, and college name.' 
+      });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+
+    // Validate phone number (basic validation)
+    const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+    if (!phoneRegex.test(phone)) {
+      return res.status(400).json({ error: 'Invalid phone number format' });
+    }
+
+    // Check if event exists
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    // Check if event is still accepting registrations
+    if (event.status === 'Ended') {
+      return res.status(400).json({ error: 'Registration is closed for this event' });
+    }
+
+    // Check if user already registered (based on email for this event)
+    const existingRegistration = await EventRegistration.findOne({ 
+      event: eventId, 
+      email: email.toLowerCase() 
+    });
+
+    if (existingRegistration) {
+      return res.status(400).json({ error: 'You have already registered for this event' });
+    }
+
+    // Create new registration
+    const registration = new EventRegistration({
+      event: eventId,
+      name: name.trim(),
+      semester: parseInt(semester),
+      teamName: teamName ? teamName.trim() : undefined,
+      phone: phone.trim(),
+      email: email.toLowerCase().trim(),
+      collegeName: collegeName.trim(),
+      registrationDate: new Date()
+    });
+
+    await registration.save();
+
+    // Update participant count in event
+    await Event.findByIdAndUpdate(eventId, {
+      $inc: { number_of_participants: 1 }
+    });
+
+    res.status(201).json({ 
+      success: true, 
+      message: 'Registration successful!',
+      registrationId: registration._id
+    });
+
+  } catch (err) {
+    console.error('Error registering for event:', err);
+    
+    if (err.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid event ID format' });
+    }
+    
+    if (err.name === 'ValidationError') {
+      const errors = Object.values(err.errors).map(e => e.message);
+      return res.status(400).json({ error: `Validation error: ${errors.join(', ')}` });
+    }
+    
+    res.status(500).json({ error: 'Failed to register for event. Please try again.' });
+  }
+});
+
+router.get('/events/:id/registrations', verifyToken, async (req, res) => {
+  try {
+    const eventId = req.params.id;
+
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    if (event.user.toString() !== req.user.user_id) {
+      return res.status(403).json({ error: 'Unauthorized to view registrations for this event' });
+    }
+
+    const registrations = await EventRegistration.find({ event: eventId })
+      .sort({ registrationDate: -1 });
+
+    res.json({
+      success: true,
+      count: registrations.length,
+      registrations: registrations.map(reg => ({
+        id: reg._id,
+        name: reg.name,
+        semester: reg.semester,
+        teamName: reg.teamName,
+        phone: reg.phone,
+        email: reg.email,
+        collegeName: reg.collegeName,
+        registrationDate: reg.registrationDate
+      }))
+    });
+
+  } catch (err) {
+    console.error('Error fetching event registrations:', err);
+    if (err.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid event ID format' });
+    }
+    res.status(500).json({ error: 'Failed to fetch registrations' });
+  }
+});
 
 
 export default router; 
