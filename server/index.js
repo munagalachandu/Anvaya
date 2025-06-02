@@ -28,7 +28,7 @@ mongoose.connect(process.env.MONGO_URI, {
 // Function to seed users
 const seedUsers = async () => {
   try {
-    const userCount = await User.countDocuments();
+    const userCount = await User.countDocuments(); // Check the number of users in the database
     if (userCount === 0) {
       // Only seed if no users exist
       const hashedPassword1 = await bcrypt.hash('password123', 10);
@@ -43,16 +43,15 @@ const seedUsers = async () => {
         { name: 'Student Two', email: 'student2@example.com', password: hashedPassword4, role: 'student' },
       ];
 
-      await User.insertMany(users);
+      await User.insertMany(users); // Insert users into the database
       console.log('Users seeded successfully');
     } else {
-      console.log('Users already exist, skipping seeding');
+      console.log('Users already exist, skipping seeding'); // Skip seeding if users exist
     }
   } catch (error) {
     console.error('Error seeding users:', error);
   }
 };
-
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
 app.use('/api', authRoutes);
