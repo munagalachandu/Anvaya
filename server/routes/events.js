@@ -8,11 +8,11 @@ import cloudinary from '../config/cloudinary.js';
 
 const router = express.Router();
 
-// Configure multer for memory storage
+
 const upload = multer({ 
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 5 * 1024 * 1024 
   },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
@@ -23,7 +23,6 @@ const upload = multer({
   }
 });
 
-// Middleware placeholder for JWT auth
 const verifyToken = (req, res, next) => {
   const token = req.headers['authorization'];
   if (!token) return res.status(401).json({ error: 'Authorization token is missing' });
@@ -35,8 +34,6 @@ const verifyToken = (req, res, next) => {
     return res.status(401).json({ error: 'Invalid or expired token' });
   }
 };
-
-// Get events for a faculty (from JWT)
 router.get('/fac_events', verifyToken, async (req, res) => {
   try {
     const events = await Event.find({ user: req.user.user_id });
@@ -59,8 +56,6 @@ router.get('/fac_events', verifyToken, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch events' });
   }
 });
-
-// Add event as faculty (user from JWT)
 router.post('/fac_add_events', verifyToken, upload.single('image'), async (req, res) => {
   const { title, category, start_date, end_date, venue, description, guest_name, guest_contact, session_details } = req.body;
   if (!title || !category || !start_date || !end_date || !venue || !description) {
@@ -120,7 +115,6 @@ router.get('/student_events/:studentId', verifyToken, async (req, res) => {
   }
 });
 
-// Get student events for verification (admin/faculty)
 router.get('/student_events_verify/:teacherId', verifyToken, async (req, res) => {
   try {
     const events = await Event.find();
@@ -129,8 +123,6 @@ router.get('/student_events_verify/:teacherId', verifyToken, async (req, res) =>
     res.status(500).json({ error: 'Failed to fetch events' });
   }
 });
-
-// Get events by category
 router.get('/events/category/:category', async (req, res) => {
   try {
     const events = await Event.find({ category: req.params.category });
@@ -139,8 +131,6 @@ router.get('/events/category/:category', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch events' });
   }
 });
-
-// Get all events (for students)
 router.get('/events', async (req, res) => {
   try {
     const events = await Event.find();
@@ -196,7 +186,7 @@ router.put('/edit_events/:eventId', verifyToken, upload.single('image'), async (
     };
 
     if (req.file) {
-      // Upload new image to Cloudinary
+      
       const b64 = Buffer.from(req.file.buffer).toString('base64');
       const dataURI = `data:${req.file.mimetype};base64,${b64}`;
       
@@ -211,7 +201,6 @@ router.put('/edit_events/:eventId', verifyToken, upload.single('image'), async (
       
       updateData.image = result.secure_url;
 
-      // Delete old image from Cloudinary if it exists
       if (event.image && event.image.includes('cloudinary')) {
         const publicId = event.image.split('/').slice(-1)[0].split('.')[0];
         await cloudinary.uploader.destroy(publicId);
@@ -254,7 +243,7 @@ router.delete('/delete_event/:eventId', verifyToken, async (req, res) => {
 
 router.get('/all_events', async (req, res) => {
   try {
-    const events = await Event.find(); // no populate, just raw events
+    const events = await Event.find(); 
     res.status(200).json(events);
   } catch (error) {
     console.error('Error fetching events:', error);
@@ -262,9 +251,6 @@ router.get('/all_events', async (req, res) => {
   }
 });
 
-// Add these routes to your existing event routes file
-
-// Get single event by ID (for event details page)
 router.get('/events/:id', async (req, res) => {
   try {
     const eventId = req.params.id;
@@ -305,7 +291,6 @@ router.get('/events/:id', async (req, res) => {
   }
 });
 
-// Register for an event (without authentication - public registration)
 router.post('/events/:id/register', async (req, res) => {
   try {
     const eventId = req.params.id;
@@ -330,18 +315,16 @@ router.post('/events/:id/register', async (req, res) => {
       return res.status(400).json({ error: 'Invalid phone number format' });
     }
 
-    // Check if event exists
     const event = await Event.findById(eventId);
     if (!event) {
       return res.status(404).json({ error: 'Event not found' });
     }
 
-    // Check if event is still accepting registrations
     if (event.status === 'Ended') {
       return res.status(400).json({ error: 'Registration is closed for this event' });
     }
 
-    // Check if user already registered (based on email for this event)
+   
     const existingRegistration = await EventRegistration.findOne({ 
       event: eventId, 
       email: email.toLowerCase() 
@@ -351,7 +334,7 @@ router.post('/events/:id/register', async (req, res) => {
       return res.status(400).json({ error: 'You have already registered for this event' });
     }
 
-    // Create new registration
+
     const registration = new EventRegistration({
       event: eventId,
       name: name.trim(),
@@ -432,5 +415,200 @@ router.get('/events/:id/registrations', verifyToken, async (req, res) => {
   }
 });
 
+
+router.get('/events/student/:eventId/status', verifyToken, async (req, res) => {
+  try {
+    const eventId = req.params.eventId;
+    const studentId = req.user.user_id;
+    
+    // Find the user to get their email
+    const user = await User.findById(studentId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+   
+    const registration = await EventRegistration.findOne({ 
+      event: eventId, 
+      email: user.email.toLowerCase()
+    });
+    
+    if (registration) {
+      res.json({ 
+        status: 'registered',
+        registrationDate: registration.registrationDate,
+        registrationId: registration._id
+      });
+    } else {
+      res.json({ 
+        status: 'not_registered'
+      });
+    }
+    
+  } catch (err) {
+    console.error('Error checking registration status:', err);
+    res.status(500).json({ error: 'Failed to check registration status' });
+  }
+});
+
+router.post('/events/student/:eventId/register', verifyToken, async (req, res) => {
+  try {
+    const eventId = req.params.eventId;
+    const { semester, teamName, phone } = req.body;
+    
+    // Get student ID from JWT token
+    const studentId = req.user.user_id;
+    
+    // Find the user by student ID
+    const user = await User.findById(studentId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+    
+    const { name, email } = user;
+    
+    // Validate required fields
+    if (!semester || !phone) {
+      return res.status(400).json({ 
+        error: 'Missing required fields. Please provide semester and phone number.' 
+      });
+    }
+
+    const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+    if (!phoneRegex.test(phone)) {
+      return res.status(400).json({ error: 'Invalid phone number format' });
+    }
+
+    const semesterNum = parseInt(semester);
+    if (!semesterNum || semesterNum < 1 || semesterNum > 8) {
+      return res.status(400).json({ error: 'Invalid semester. Please select a valid semester (1-8).' });
+    }
+
+    // Check if event exists
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    // Check if event is still accepting registrations
+    if (event.status === 'Ended') {
+      return res.status(400).json({ error: 'Registration is closed for this event' });
+    }
+
+    // Check if the event date has passed
+    const currentDate = new Date();
+    const eventStartDate = new Date(event.start_date);
+    if (eventStartDate < currentDate) {
+      return res.status(400).json({ error: 'Cannot register for past events' });
+    }
+
+    // Check if user already registered for this event
+    const existingRegistration = await EventRegistration.findOne({ 
+      event: eventId, 
+      email: email.toLowerCase()
+    });
+
+    if (existingRegistration) {
+      return res.status(400).json({ 
+        error: 'You have already registered for this event',
+        status: 'already_registered' 
+      });
+    }
+
+    // Create new registration
+    const registration = new EventRegistration({
+      event: eventId,
+      student: studentId,
+      name,
+      semester: semesterNum,
+      teamName: teamName ? teamName.trim() : '',
+      phone: phone.trim(),
+      email: email.toLowerCase(),
+      collegeName: "Dayananda Sagar College of Engineering",
+      registrationDate: new Date(),
+      status: 'registered'
+    });
+
+    await registration.save();
+
+    // Update participant count in event
+    await Event.findByIdAndUpdate(eventId, {
+      $inc: { number_of_participants: 1 }
+    });
+
+    res.status(201).json({ 
+      success: true, 
+      message: `Registration successful for ${event.event_name}!`,
+      registrationId: registration._id,
+      status: 'registered',
+      event: {
+        id: event._id,
+        name: event.event_name,
+        date: event.start_date,
+        venue: event.venue
+      }
+    });
+
+  } catch (err) {
+    console.error('Error registering student for event:', err);
+    
+    if (err.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid event ID format' });
+    }
+    
+    if (err.name === 'ValidationError') {
+      const errors = Object.values(err.errors).map(e => e.message);
+      return res.status(400).json({ error: `Validation error: ${errors.join(', ')}` });
+    }
+    
+    if (err.code === 11000) {
+      // Handle duplicate key error (if you have unique indexes)
+      return res.status(400).json({ error: 'Duplicate registration detected' });
+    }
+    
+    res.status(500).json({ error: 'Failed to register for event. Please try again.' });
+  }
+});
+
+
+// Add this route to your Express router
+router.get('/getparticipants/:eventId', verifyToken, async (req, res) => {
+  try {
+    const eventId = req.params.eventId;
+
+    // Check if event exists
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    // Check if user is authorized to view participants (event creator)
+    if (event.user.toString() !== req.user.user_id) {
+      return res.status(403).json({ error: 'Unauthorized to view participants for this event' });
+    }
+const numberOfParticipants = event.number_of_participants || 0;
+    const registrations = await EventRegistration.find({ event: eventId })
+      .sort({ registrationDate: -1 });
+
+    const participants = registrations.map(reg => ({
+      id: reg._id,
+      name: reg.name,
+      semester: reg.semester,
+      teamName: reg.teamName,
+      phone: reg.phone,
+      email: reg.email,
+      collegeName: reg.collegeName,
+      registrationDate: reg.registrationDate
+    }));
+
+    res.status(200).json(participants);
+
+  } catch (err) {
+    console.error('Error fetching participants:', err);
+    if (err.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid event ID format' });
+    }
+    res.status(500).json({ error: 'Failed to fetch participants' });
+  }
+});
 
 export default router; 

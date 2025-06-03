@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, Award, MapPin, CalendarDays, Clock, CheckCircle, Link, ExternalLink, Upload, GraduationCap } from 'lucide-react';
+import { Calendar, Award, MapPin, CalendarDays, Clock, CheckCircle, Link, ExternalLink, Upload, GraduationCap, X } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useToast } from '@/hooks/use-toast';
@@ -43,6 +43,16 @@ const StudentDashboard = () => {
   const [registering, setRegistering] = useState(false);
   const [registrationStatus, setRegistrationStatus] = useState({});
   const [showEventModal, setShowEventModal] = useState(false);
+  
+  // Registration dialog states - simplified
+  const [showRegistrationDialog, setShowRegistrationDialog] = useState(false);
+  const [registrationData, setRegistrationData] = useState({
+    semester: '',
+    teamName: '',
+    phone: ''
+  });
+  const [registrationLoading, setRegistrationLoading] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
 
   // Semester options for dropdown
   const semesterOptions = [
@@ -60,6 +70,7 @@ const StudentDashboard = () => {
     if (studentId) {
       fetchRegisteredEvents(studentId);
       fetchAchievements(studentId);
+      fetchUserProfile(studentId);
     } else {
       toast({
         title: "Error",
@@ -76,6 +87,22 @@ const StudentDashboard = () => {
       .catch(() => setEventError('Failed to fetch events.'))
       .finally(() => setLoadingAllEvents(false));
   }, []);
+
+  const fetchUserProfile = async (studentId) => {
+    try {
+      const response = await axios.get(`http://localhost:5001/api/student/${studentId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
+        }
+      });
+
+      if (response.status === 200) {
+        setUserProfile(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
+  };
 
   const fetchRegisteredEvents = async (studentId) => {
     setLoadingEvents(true);
@@ -204,20 +231,121 @@ const StudentDashboard = () => {
     navigate('/login?role=student');
   };
 
-  const handleRegister = async (eventId) => {
-    setRegistering(true);
-    try {
-      await axiosInstance.post(`/events/${eventId}/register`);
-      setRegistrationStatus(prev => ({ ...prev, [eventId]: 'registered' }));
-      toast({ title: 'Registered', description: 'You have registered for this event.' });
-    } catch (err) {
-      setRegistrationStatus(prev => ({ ...prev, [eventId]: 'error' }));
-      toast({ title: 'Error', description: err.response?.data?.error || 'Failed to register.' });
-    } finally {
-      setRegistering(false);
-    }
+  const handleRegistrationChange = (e) => {
+    const { name, value } = e.target;
+    setRegistrationData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
+  const handleRegisterClick = (event) => {
+    setSelectedEvent(event);
+    // Pre-fill form with user data (only phone if available)
+    setRegistrationData({
+      semester: '',
+      teamName: '',
+      phone: userProfile?.phone || ''
+    });
+    setShowRegistrationDialog(true);
+  };
+
+  // Add this function to check registration status when events load
+const checkRegistrationStatus = async (events) => {
+  const statusPromises = events.map(async (event) => {
+    try {
+      // Check if user is already registered for this event
+      const response = await axios.get(
+        `http://localhost:5001/api/events/student/${event.id}/status`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
+          }
+        }
+      );
+      return { eventId: event.id, status: response.data.status };
+    } catch (error) {
+      return { eventId: event.id, status: 'not_registered' };
+    }
+  });
+
+  const statuses = await Promise.all(statusPromises);
+  const statusMap = {};
+  statuses.forEach(({ eventId, status }) => {
+    statusMap[eventId] = status;
+  });
+  
+  setRegistrationStatus(statusMap);
+};
+
+// Update the useEffect that fetches events
+useEffect(() => {
+  setLoadingAllEvents(true);
+  axiosInstance.get('/events')
+    .then(res => {
+      setAllEvents(res.data);
+      // Check registration status for all events
+      checkRegistrationStatus(res.data);
+    })
+    .catch(() => setEventError('Failed to fetch events.'))
+    .finally(() => setLoadingAllEvents(false));
+}, []);
+
+// Update the registration submit handler
+const handleRegistrationSubmit = async (e) => {
+  e.preventDefault();
+  setRegistrationLoading(true);
+
+  try {
+    const response = await axios.post(
+      `http://localhost:5001/api/events/student/${selectedEvent.id}/register`,
+      registrationData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    if (response.status === 200 || response.status === 201) {
+      setRegistrationStatus(prev => ({ ...prev, [selectedEvent.id]: 'registered' }));
+      toast({ 
+        title: 'Registration Successful', 
+        description: response.data.message || `You have successfully registered for ${selectedEvent.title}.` 
+      });
+      setShowRegistrationDialog(false);
+      
+      // Reset form
+      setRegistrationData({
+        semester: '',
+        teamName: '',
+        phone: ''
+      });
+    }
+  } catch (error) {
+    console.error('Registration error:', error);
+    
+    if (error.response?.data?.status === 'already_registered') {
+    
+      setRegistrationStatus(prev => ({ ...prev, [selectedEvent.id]: 'registered' }));
+      toast({ 
+        title: 'Already Registered', 
+        description: 'You are already registered for this event.',
+        variant: 'default'
+      });
+      setShowRegistrationDialog(false);
+    } else {
+      toast({ 
+        title: 'Registration Failed', 
+        description: error.response?.data?.error || 'Failed to register for event. Please try again.',
+        variant: 'destructive'
+      });
+    }
+  } finally {
+    setRegistrationLoading(false);
+  }
+};
   const clearForm = () => {
     setEventName('');
     setEventDate('');
@@ -306,7 +434,15 @@ const StudentDashboard = () => {
                         </CardDescription>
                       </CardHeader>
                       <CardFooter className="flex justify-between">
-                        <Button variant="outline" className="w-full" onClick={e => { e.stopPropagation(); handleRegister(event.id); }} disabled={registrationStatus[event.id] === 'registered' || registering}>
+                        <Button 
+                          variant="outline" 
+                          className="w-full" 
+                          onClick={e => { 
+                            e.stopPropagation(); 
+                            handleRegisterClick(event); 
+                          }} 
+                          disabled={registrationStatus[event.id] === 'registered' || registering}
+                        >
                           {registrationStatus[event.id] === 'registered' ? 'Registered' : 'Register'}
                         </Button>
                       </CardFooter>
@@ -561,13 +697,105 @@ const StudentDashboard = () => {
                 <div><b>Participants:</b> {selectedEvent.participants}</div>
               </div>
               <DialogFooter>
-                <Button onClick={() => handleRegister(selectedEvent.id)} disabled={registrationStatus[selectedEvent.id] === 'registered' || registering}>
+                <Button 
+                  onClick={() => {
+                    setShowEventModal(false);
+                    handleRegisterClick(selectedEvent);
+                  }} 
+                  disabled={registrationStatus[selectedEvent.id] === 'registered' || registering}
+                >
                   {registrationStatus[selectedEvent.id] === 'registered' ? 'Registered' : 'Register'}
                 </Button>
                 <Button variant="outline" onClick={() => setShowEventModal(false)}>Close</Button>
               </DialogFooter>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Simplified Registration Dialog */}
+      <Dialog open={showRegistrationDialog} onOpenChange={setShowRegistrationDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Register for {selectedEvent?.title}</DialogTitle>
+            <DialogDescription>
+              Please provide the following details to complete your registration
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleRegistrationSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="reg-semester" className="text-sm font-medium">
+                Current Semester *
+              </Label>
+              <Select 
+                value={registrationData.semester} 
+                onValueChange={(value) => setRegistrationData(prev => ({...prev, semester: value}))}
+              >
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Select your current semester" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1st Semester</SelectItem>
+                  <SelectItem value="2">2nd Semester</SelectItem>
+                  <SelectItem value="3">3rd Semester</SelectItem>
+                  <SelectItem value="4">4th Semester</SelectItem>
+                  <SelectItem value="5">5th Semester</SelectItem>
+                  <SelectItem value="6">6th Semester</SelectItem>
+                  <SelectItem value="7">7th Semester</SelectItem>
+                  <SelectItem value="8">8th Semester</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="reg-team" className="text-sm font-medium">
+                Team Name <span className="text-gray-400">(if applicable)</span>
+              </Label>
+              <Input
+                id="reg-team"
+                name="teamName"
+                placeholder="Enter team name for group events"
+                value={registrationData.teamName}
+                onChange={handleRegistrationChange}
+                className="mt-1"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="reg-phone" className="text-sm font-medium">
+                Phone Number *
+              </Label>
+              <Input
+                id="reg-phone"
+                name="phone"
+                type="tel"
+                placeholder="Enter your phone number"
+                value={registrationData.phone}
+                onChange={handleRegistrationChange}
+                required
+                className="mt-1"
+              />
+            </div>
+
+            <DialogFooter className="flex gap-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowRegistrationDialog(false)}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={registrationLoading || !registrationData.semester || !registrationData.phone}
+                className="flex-1"
+              >
+                {registrationLoading ? 'Registering...' : 'Register'}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </div>
