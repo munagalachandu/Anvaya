@@ -341,8 +341,9 @@ const StudentAchievementsDashboard = () => {
     try {
       const res = await axiosInstance.get("/bookings");
       setPendingBookings(res.data.filter((b) => b.status === "pending"));
-    } catch {
+    } catch (err) {
       setPendingBookings([]);
+      toast({ title: "Error", description: err.response?.data?.error || "Failed to fetch bookings." });
     } finally {
       setBookingLoading(false);
     }
@@ -667,6 +668,9 @@ const StudentAchievementsDashboard = () => {
                 </h2>
                 <p className="mb-4 text-gray-600">
                   Review and approve or reject venue booking requests below.
+                  <Button size="sm" variant="outline" className="ml-4" onClick={fetchPendingBookings}>
+                    Refresh
+                  </Button>
                 </p>
                 {bookingLoading ? (
                   <div className="flex justify-center p-8">
@@ -684,17 +688,14 @@ const StudentAchievementsDashboard = () => {
                             {booking.classroom?.name || booking.classroom}
                           </div>
                           <div className="text-gray-700 text-sm mt-1">
-                            Date:{" "}
-                            <span className="font-medium">{booking.date}</span>
+                            Date: <span className="font-medium">{booking.date}</span>
                           </div>
                           <div className="text-gray-700 text-sm">
-                            Slot:{" "}
-                            <span className="font-medium">{booking.slot}</span>
+                            Slot: <span className="font-medium">{booking.slot}</span>
                           </div>
                           {booking.requestedBy && (
                             <div className="text-gray-500 text-xs mt-1">
-                              Requested by:{" "}
-                              {booking.requestedBy.name || booking.requestedBy}
+                              Requested by: {booking.requestedBy.name || booking.requestedBy}
                             </div>
                           )}
                         </div>
@@ -728,93 +729,6 @@ const StudentAchievementsDashboard = () => {
                   </div>
                 )}
               </div>
-              <div className="mb-4">
-                <Label>Date</Label>
-                <Input
-                  type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                />
-              </div>
-              <Card className="animate-fade-in bg-white">
-                <CardHeader>
-                  <CardTitle>
-                    Timetable & Bookings for {selectedDate || "..."}
-                  </CardTitle>
-                  <CardDescription>
-                    See all classroom usage for the selected date
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full text-sm">
-                      <thead>
-                        <tr>
-                          <th className="px-2 py-1">Classroom</th>
-                          {/* slots array should be defined as in FacultyDashboard */}
-                          {slots.map((slot) => (
-                            <th key={slot} className="px-2 py-1">
-                              {slot}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {classrooms.map((room) => (
-                          <tr key={room._id}>
-                            <td className="font-medium px-2 py-1">
-                              {room.name}
-                            </td>
-                            {slots.map((slot) => {
-                              const timetableEntry =
-                                timetableData.timetable.find(
-                                  (e) =>
-                                    e.classroom === room.name && e.slot === slot
-                                );
-                              const booking = timetableData.bookings.find(
-                                (b) =>
-                                  b.classroom &&
-                                  (b.classroom._id === room._id ||
-                                    b.classroom === room._id) &&
-                                  b.slot === slot
-                              );
-                              if (timetableEntry) {
-                                return (
-                                  <td
-                                    key={slot}
-                                    className="px-2 py-1 bg-blue-50 text-blue-800"
-                                  >
-                                    {timetableEntry.subject} (
-                                    {timetableEntry.section})
-                                  </td>
-                                );
-                              } else if (booking) {
-                                return (
-                                  <td
-                                    key={slot}
-                                    className="px-2 py-1 bg-yellow-50 text-yellow-800"
-                                  >
-                                    Booked ({booking.status})
-                                  </td>
-                                );
-                              } else {
-                                return (
-                                  <td
-                                    key={slot}
-                                    className="px-2 py-1 text-green-700"
-                                  >
-                                    Available
-                                  </td>
-                                );
-                              }
-                            })}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </CardContent>
-              </Card>
             </TabsContent>
           </Tabs>
 

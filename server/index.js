@@ -8,6 +8,7 @@ import achievementRoutes from './routes/achievements.js';
 import classroomRoutes from './routes/classrooms.js';
 import User from './models/User.js'; // Import the User model
 import bcrypt from 'bcryptjs';
+import bookingsRouter from './routes/bookings.js';
 
 dotenv.config();
 
@@ -61,6 +62,7 @@ app.use('/api', authRoutes);
 app.use('/api', eventRoutes);
 app.use('/api', achievementRoutes);
 app.use('/api', classroomRoutes);
+app.use('/api/bookings', bookingsRouter);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
